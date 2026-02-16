@@ -1,242 +1,245 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hepta-SVT</title>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
 
 body{
-margin:0;
-font-family:Arial;
-text-align:center;
-background:#f4f6f8;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:#fff;
+overflow-x:hidden;
 }
 
-.bg{
+/* Navbar */
+.navbar{
+height:60px;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(10px);
+display:flex;
+align-items:center;
+padding:0 20px;
+position:fixed;
+width:100%;
+top:0;
+z-index:1000;
+}
+.menu-btn{
+font-size:25px;
+cursor:pointer;
+margin-right:20px;
+}
+.navbar h1{font-size:20px}
+
+/* Sidebar */
+.sidebar{
+position:fixed;
+top:0;
+left:-250px;
+width:250px;
+height:100%;
+background:rgba(0,0,0,0.8);
+backdrop-filter:blur(15px);
+padding:20px;
+transition:0.4s;
+z-index:999;
+}
+.sidebar.active{left:0;}
+.sidebar img{
+width:80px;
+border-radius:50%;
+display:block;
+margin:20px auto;
+}
+.sidebar a{
+display:block;
+padding:12px;
+margin:10px 0;
+background:rgba(255,255,255,0.1);
+border-radius:8px;
+cursor:pointer;
+text-align:center;
+transition:0.3s;
+}
+.sidebar a:hover{background:#3498db;}
+
+/* Main */
+.main{
+margin-top:70px;
+padding:20px;
+}
+
+/* Cards */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:20px;
+border-radius:15px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+.card:hover{
+transform:scale(1.05);
+background:#3498db;
+}
+
+/* Popup */
+.popup{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-background:url("logo.jpg") no-repeat center center;
-background-size:contain;
-opacity:0.08;
-z-index:0;
+background:rgba(0,0,0,0.8);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:2000;
 }
-
-.container{
-position:relative;
-z-index:2;
-padding-top:40px;
-min-height:100vh;
-}
-
-.card{
-width:360px;
-margin:10px auto;
-padding:15px;
-background:#3498db;
-color:white;
+.popup img{
+max-width:90%;
+max-height:90%;
 border-radius:10px;
+}
+.close{
+position:absolute;
+top:20px;
+right:30px;
+font-size:30px;
 cursor:pointer;
 }
 
-.card:hover{background:#2980b9;}
-
+/* Hide */
 .hidden{display:none;}
-
-.ppt{
-width:960px;
-height:540px;
-margin:20px auto;
-background:white;
-display:flex;
-align-items:center;
-justify-content:center;
-box-shadow:0 0 15px rgba(0,0,0,0.2);
-border-radius:10px;
-}
-
-.ppt img{
-max-width:100%;
-max-height:100%;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
-
-<!-- واجهة البرنامج -->
-<div id="loading" class="container">
-<h1 style="font-size:90px;">Hepta-SVT</h1>
-<p>برنامج تعلمي لعلوم الحياة والأرض</p>
+<div class="navbar">
+<span class="menu-btn" onclick="toggleSidebar()">☰</span>
+<h1>Hepta-SVT</h1>
 </div>
 
-<!-- القائمة الرئيسية -->
-<div id="home" class="container hidden">
-<h2>القائمة الرئيسية</h2>
-<div class="card" onclick="showLessons()">الدروس</div>
-<div class="card" onclick="showTests()">اختبر نفسك</div>
+<div class="sidebar" id="sidebar">
+<img src="logo.jpg">
+<a onclick="showPage('dashboard')">Accueil</a>
+<a onclick="showPage('lessons')">Les cours</a>
+<a onclick="showPage('tests')">Testez-vous</a>
 </div>
 
-<!-- صفحة اختبر نفسك -->
-<div id="tests" class="container hidden">
-<h2>اختبر نفسك</h2>
+<div class="main">
 
-<div class="card">اختبر معارفك</div>
-<div class="card">اختبر مهاراتك</div>
-<div class="card">ألعاب تربوية</div>
-
-<div class="card" onclick="goHome()">⬅ رجوع</div>
+<div id="dashboard">
+<h2>Bienvenue sur Hepta-SVT</h2>
 </div>
 
-<!-- صفحة الدروس -->
-<div id="lessons" class="container hidden">
-<h2>الدروس</h2>
-
+<div id="lessons" class="hidden">
+<h2>Les cours</h2>
+<div class="cards">
 <div class="card" onclick="openLesson('nervous')">Le système nerveux</div>
 <div class="card" onclick="openLesson('muscular')">Le système musculaire</div>
-<div class="card" onclick="openLesson('microbes')">Les microbes</div>
+<div class="card" onclick="showImage('microbes.jpg')">Les microbes</div>
 <div class="card" onclick="openLesson('immune')">Le système immunitaire</div>
-<div class="card" onclick="openLesson('dysfunction')">Les dysfonctionnements du système immunitaire</div>
-<div class="card" onclick="openLesson('transfusion')">La transfusion sanguine</div>
-
-<div class="card" onclick="goHome()">⬅ رجوع</div>
+<div class="card" onclick="openLesson('dysfunction')">Dysfonctionnements immunitaires</div>
+<div class="card" onclick="showImage('transfusion.jpg')">La transfusion sanguine</div>
+</div>
 </div>
 
-<!-- صفحة الفقرات -->
-<div id="paragraphs" class="container hidden">
+<div id="paragraphs" class="hidden">
 <h2 id="lessonTitle"></h2>
-<div id="paragraphList"></div>
-<div class="card" onclick="showLessons()">⬅ رجوع</div>
+<div class="cards" id="paraCards"></div>
 </div>
 
-<!-- صفحة الملخص -->
-<div id="summary" class="container hidden">
-<h2 id="paragraphTitle"></h2>
-<div class="ppt">
-<img id="summaryImage">
+<div id="tests" class="hidden">
+<h2>Testez-vous</h2>
+<div class="cards">
+<div class="card">Testez vos connaissances</div>
+<div class="card">Testez vos compétences</div>
+<div class="card">Jeux éducatifs</div>
 </div>
-<div class="card" onclick="backToParagraphs()">⬅ رجوع</div>
+</div>
+
+</div>
+
+<div class="popup" id="popup">
+<span class="close" onclick="closePopup()">✖</span>
+<img id="popupImg">
 </div>
 
 <script>
-
-setTimeout(function(){
-document.getElementById("loading").classList.add("hidden");
-document.getElementById("home").classList.remove("hidden");
-},3000);
-
-function hideAll(){
-document.getElementById("home").classList.add("hidden");
-document.getElementById("lessons").classList.add("hidden");
-document.getElementById("paragraphs").classList.add("hidden");
-document.getElementById("summary").classList.add("hidden");
-document.getElementById("tests").classList.add("hidden");
+function toggleSidebar(){
+document.getElementById("sidebar").classList.toggle("active");
 }
 
-function goHome(){
-hideAll();
-document.getElementById("home").classList.remove("hidden");
+function showPage(page){
+document.querySelectorAll(".main > div").forEach(p=>p.classList.add("hidden"));
+document.getElementById(page).classList.remove("hidden");
+toggleSidebar();
 }
-
-function showLessons(){
-hideAll();
-document.getElementById("lessons").classList.remove("hidden");
-}
-
-function showTests(){
-hideAll();
-document.getElementById("tests").classList.remove("hidden");
-}
-
-let currentLesson="";
 
 function openLesson(lesson){
+showPage("paragraphs");
+let title=document.getElementById("lessonTitle");
+let cards=document.getElementById("paraCards");
+cards.innerHTML="";
 
-currentLesson=lesson;
-
-if(lesson=="microbes"){
-showSummary("microbes.jpg","Les microbes");
-return;
+if(lesson=="nervous"){
+title.innerText="Le système nerveux";
+addCard(cards,"L'organisation","nervous_1.jpg");
+addCard(cards,"La sensibilité consciente","nervous_2.jpg");
+addCard(cards,"La motricité volontaire","nervous_3.jpg");
+addCard(cards,"Motricité involontaire","nervous_4.jpg");
+addCard(cards,"Hygiène","nervous_5.jpg");
 }
 
-if(lesson=="transfusion"){
-showSummary("transfusion.jpg","La transfusion sanguine");
-return;
+if(lesson=="muscular"){
+title.innerText="Le système musculaire";
+addCard(cards,"Rôle du muscle","muscular_1.jpg");
+addCard(cards,"Structure","muscular_2.jpg");
+addCard(cards,"Besoins","muscular_3.jpg");
 }
 
-hideAll();
-document.getElementById("paragraphs").classList.remove("hidden");
-
-let title="";
-let content="";
-
-switch(lesson){
-
-case "nervous":
-title="Le système nerveux";
-content=`
-<div class="card" onclick="showSummary('nervous_1.jpg','Organisation du système nerveux')">L'organisation du système nerveux</div>
-<div class="card" onclick="showSummary('nervous_2.jpg','La sensibilité consciente')">La sensibilité consciente</div>
-<div class="card" onclick="showSummary('nervous_3.jpg','La motricité volontaire')">La motricité volontaire</div>
-<div class="card" onclick="showSummary('nervous_4.jpg','La motricité involontaire')">La motricité involontaire (les réflexes médullaires)</div>
-<div class="card" onclick="showSummary('nervous_5.jpg','Hygiène du système nerveux')">Hygiène du système nerveux</div>
-`;
-break;
-
-case "muscular":
-title="Le système musculaire";
-content=`
-<div class="card" onclick="showSummary('muscular_1.jpg','Rôle du muscle')">Le rôle et les propriétés du muscle squelettique</div>
-<div class="card" onclick="showSummary('muscular_2.jpg','Structure du muscle')">La structure du muscle squelettique</div>
-<div class="card" onclick="showSummary('muscular_3.jpg','Besoins de contraction')">Les besoins de la contraction musculaire et hygiène du système musculaire</div>
-`;
-break;
-
-case "immune":
-title="Le système immunitaire";
-content=`
-<div class="card" onclick="showSummary('immune_1.jpg','Immunité naturelle')">Immunité naturelle</div>
-<div class="card" onclick="showSummary('immune_2.jpg','Immunité spécifique')">Immunité spécifique</div>
-<div class="card" onclick="showSummary('immune_3.jpg','Organes lymphoïdes')">Les organes lymphoïdes - la coopération cellulaire</div>
-<div class="card" onclick="showSummary('immune_4.jpg','Renforcement')">Renforcement du système immunitaire</div>
-`;
-break;
-
-case "dysfunction":
-title="Les dysfonctionnements du système immunitaire";
-content=`
-<div class="card" onclick="showSummary('dysfunction_1.jpg','Allergies')">Les allergies</div>
-<div class="card" onclick="showSummary('dysfunction_2.jpg','Sida')">Le sida</div>
-`;
-break;
-
+if(lesson=="immune"){
+title.innerText="Le système immunitaire";
+addCard(cards,"Immunité naturelle","immune_1.jpg");
+addCard(cards,"Immunité spécifique","immune_2.jpg");
+addCard(cards,"Organes lymphoïdes","immune_3.jpg");
+addCard(cards,"Renforcement","immune_4.jpg");
 }
 
-document.getElementById("lessonTitle").innerText=title;
-document.getElementById("paragraphList").innerHTML=content;
-}
-
-function showSummary(image,title){
-hideAll();
-document.getElementById("summary").classList.remove("hidden");
-document.getElementById("summaryImage").src=image;
-document.getElementById("paragraphTitle").innerText=title;
-}
-
-function backToParagraphs(){
-if(currentLesson=="microbes" || currentLesson=="transfusion"){
-showLessons();
-}else{
-openLesson(currentLesson);
+if(lesson=="dysfunction"){
+title.innerText="Dysfonctionnements";
+addCard(cards,"Allergies","dysfunction_1.jpg");
+addCard(cards,"SIDA","dysfunction_2.jpg");
 }
 }
 
+function addCard(parent,text,img){
+let div=document.createElement("div");
+div.className="card";
+div.innerText=text;
+div.onclick=()=>showImage(img);
+parent.appendChild(div);
+}
+
+function showImage(img){
+document.getElementById("popup").style.display="flex";
+document.getElementById("popupImg").src=img;
+}
+
+function closePopup(){
+document.getElementById("popup").style.display="none";
+}
 </script>
 
 </body>
