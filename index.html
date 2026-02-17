@@ -895,12 +895,835 @@
             border-width: 0;
         }
 
+        /* Game Styles */
+        .game-hud {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .game-hud-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .game-hud-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .game-hud-label {
+            font-size: 11px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .game-hud-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .game-points {
+            color: var(--accent);
+        }
+
+        .game-progress-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .game-progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        .game-question-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 35px;
+            margin-bottom: 25px;
+        }
+
+        .game-clue-box {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .game-clue-label {
+            font-size: 12px;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .game-clue-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .game-answer-section {
+            margin-bottom: 30px;
+        }
+
+        .game-answer-label {
+            font-size: 13px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .game-answer-slots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            min-height: 70px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            transition: var(--transition);
+        }
+
+        .game-answer-slots.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .game-answer-slots.wrong {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            animation: shake 0.5s ease-out;
+        }
+
+        .game-letter-slot {
+            width: 52px;
+            height: 58px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--primary-light);
+            text-transform: uppercase;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .game-letter-slot:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .game-letter-slot.correct-letter {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .game-choices-section {
+            margin-bottom: 25px;
+        }
+
+        .game-choices-label {
+            font-size: 13px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .game-letter-choices {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 80px;
+        }
+
+        .game-letter-btn {
+            width: 55px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 24px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-letter-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-main);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .game-letter-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-letter-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .game-letter-btn:hover:not(:disabled)::before {
+            opacity: 0.3;
+        }
+
+        .game-letter-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .game-btn {
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-btn-primary {
+            background: var(--gradient-main);
+            color: var(--white);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .game-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .game-btn-ghost {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--gray);
+        }
+
+        .game-btn-ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .game-feedback {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .game-feedback.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .game-feedback-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px 60px;
+            text-align: center;
+            animation: bounceIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 420px;
+            width: 90%;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .game-feedback-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .game-feedback-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .game-feedback-title.success {
+            color: var(--success);
+        }
+
+        .game-feedback-title.error {
+            color: var(--danger);
+        }
+
+        .game-feedback-msg {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 25px;
+        }
+
+        .game-feedback-points {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .float-points {
+            position: fixed;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--accent);
+            pointer-events: none;
+            z-index: 4000;
+            animation: floatUp 1.5s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
         /* Focus Styles */
         button:focus,
         .sidebar-item:focus,
         .card:focus {
             outline: 2px solid var(--primary);
             outline-offset: 2px;
+        }
+
+        /* ===== GAME STYLES ===== */
+        .game-hud {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .game-hud-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-hud-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .game-hud-label {
+            font-size: 11px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .game-hud-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-light);
+        }
+
+        .game-hud-value.game-points {
+            color: var(--accent);
+        }
+
+        .game-progress-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .game-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .game-question-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .game-clue-box {
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .game-clue-label {
+            font-size: 12px;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .game-clue-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .game-answer-section {
+            margin-bottom: 30px;
+        }
+
+        .game-answer-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .game-answer-slots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            min-height: 80px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .game-answer-slots.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+            animation: successPulse 0.6s ease-out;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .game-answer-slots.wrong {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            animation: wrongShake 0.5s ease-out;
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+        }
+
+        .game-letter-slot {
+            width: 55px;
+            height: 62px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--primary-light);
+            text-transform: uppercase;
+            animation: letterPop 0.3s ease-out;
+        }
+
+        @keyframes letterPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .game-letter-slot:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .game-letter-slot.correct-letter {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+            animation: correctFlash 0.6s ease-out;
+        }
+
+        @keyframes correctFlash {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .game-choices-section {
+            margin-bottom: 30px;
+        }
+
+        .game-choices-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .game-letter-choices {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-height: 100px;
+        }
+
+        .game-letter-btn {
+            width: 58px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.25));
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 26px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-letter-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .game-letter-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-letter-btn:hover:not(:disabled) {
+            border-color: var(--primary-light);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .game-letter-btn:hover:not(:disabled)::before {
+            opacity: 0.3;
+        }
+
+        .game-letter-btn:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .game-letter-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .game-btn {
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .game-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .game-btn-ghost {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--gray);
+        }
+
+        .game-btn-ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .game-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Game Feedback Modal */
+        .game-feedback {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .game-feedback.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .game-feedback-card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px 60px;
+            text-align: center;
+            animation: feedbackBounce 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        @keyframes feedbackBounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .game-feedback-icon {
+            font-size: 90px;
+            margin-bottom: 25px;
+            display: block;
+            animation: iconPulse 0.6s ease-out;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .game-feedback-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .game-feedback-title.success {
+            color: var(--success);
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .game-feedback-title.error {
+            color: var(--danger);
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .game-feedback-msg {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .game-feedback-points {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 12px 25px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .game-particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2999;
+        }
+
+        .game-particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: particleFly 1.5s ease-out forwards;
+        }
+
+        @keyframes particleFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .game-question-card { padding: 25px; }
+            .game-letter-slot { width: 45px; height: 52px; font-size: 20px; }
+            .game-letter-btn { width: 48px; height: 54px; font-size: 22px; }
+            .game-hud-value { font-size: 26px; }
+            .game-clue-text { font-size: 20px; }
+            .game-feedback-card { padding: 35px 25px; }
         }
     </style>
 </head>
@@ -952,10 +1775,6 @@
             <div class="sidebar-item" data-page="tests" role="button" tabindex="0" aria-label="الاختبارات">
                 <div class="sidebar-item-icon" aria-hidden="true">✍️</div>
                 <div class="sidebar-item-text">اختبر نفسك</div>
-            </div>
-            <div class="sidebar-item" data-page="games" role="button" tabindex="0" aria-label="الألعاب التعليمية">
-                <div class="sidebar-item-icon" aria-hidden="true">🎮</div>
-                <div class="sidebar-item-text">ألعاب تعليمية</div>
             </div>
             <div class="sidebar-item" data-page="exercises" role="button" tabindex="0" aria-label="سلاسل التمارين">
                 <div class="sidebar-item-icon" aria-hidden="true">📝</div>
@@ -1144,11 +1963,10 @@
                     <h3 class="card-title">اختبارات المهارات</h3>
                     <p class="card-description">اختبر قدرتك على تطبيق ما تعلمته</p>
                 </div>
-                <div class="card" tabindex="0" role="button">
-                    <div class="card-badge">قريباً</div>
-                    <div class="card-icon">⏱️</div>
-                    <h3 class="card-title">اختبارات سريعة</h3>
-                    <p class="card-description">مراجعة سريعة في دقائق معدودة</p>
+                <div class="card" onclick="navigateTo('wordScramble')" tabindex="0" role="button">
+                    <div class="card-icon">🎮</div>
+                    <h3 class="card-title">ألعاب تربوية</h3>
+                    <p class="card-description">تعلم وتسلى في نفس الوقت من خلال ألعاب تفاعلية</p>
                 </div>
             </div>
         </section>
@@ -1240,6 +2058,76 @@
                 <div class="empty-icon">🎥</div>
                 <h3 class="empty-title">محتوى قادم!</h3>
                 <p class="empty-description">سنضيف مكتبة شاملة من الفيديوهات التعليمية قريباً</p>
+            </div>
+        </section>
+
+        <!-- Word Scramble Game Page -->
+        <section id="wordScramble" class="page">
+            <button class="back-btn" onclick="navigateTo('tests')">
+                <span>→</span>
+                <span>العودة للاختبارات</span>
+            </button>
+
+            <div class="breadcrumb">
+                <span class="breadcrumb-item" onclick="navigateTo('dashboard')">
+                    <span>🏠</span>
+                    <span>الرئيسية</span>
+                </span>
+                <span class="breadcrumb-separator">←</span>
+                <span class="breadcrumb-item" onclick="navigateTo('tests')">اختبر نفسك</span>
+                <span class="breadcrumb-separator">←</span>
+                <span class="breadcrumb-item">الكلمة المبعثرة</span>
+            </div>
+
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-icon">🔤</span>
+                    الكلمة المبعثرة
+                </h2>
+            </div>
+
+            <!-- Game HUD -->
+            <div class="game-hud">
+                <div class="game-hud-item">
+                    <div class="game-hud-label">المستوى</div>
+                    <div class="game-hud-value" id="gameLevel">1</div>
+                </div>
+                <div class="game-hud-item">
+                    <div class="game-hud-label">النقاط</div>
+                    <div class="game-hud-value game-points" id="gamePoints">0</div>
+                </div>
+                <div class="game-hud-item">
+                    <div class="game-hud-label">السؤال</div>
+                    <div class="game-hud-value" id="gameProgress">1/1</div>
+                </div>
+            </div>
+
+            <!-- Game Progress Bar -->
+            <div class="game-progress-track">
+                <div class="game-progress-fill" id="gameProgressBar"></div>
+            </div>
+
+            <!-- Game Question Card -->
+            <div class="game-question-card">
+                <div class="game-clue-box">
+                    <div class="game-clue-label">💡 الدليل / L'indice</div>
+                    <div class="game-clue-text" id="gameClueText">Centre nerveux du corps</div>
+                </div>
+
+                <div class="game-answer-section">
+                    <div class="game-answer-label">✏️ رتّب الحروف هنا</div>
+                    <div class="game-answer-slots" id="gameAnswerSlots"></div>
+                </div>
+
+                <div class="game-choices-section">
+                    <div class="game-choices-label">🔡 الحروف المتاحة</div>
+                    <div class="game-letter-choices" id="gameLetterChoices"></div>
+                </div>
+
+                <div class="game-actions">
+                    <button class="game-btn game-btn-ghost" onclick="resetGameLetters()">↺ إعادة</button>
+                    <button class="game-btn game-btn-primary" onclick="checkGameAnswer()">✔ تحقق</button>
+                </div>
             </div>
         </section>
     </main>
@@ -1518,6 +2406,518 @@
                 popupClose.focus();
             }
         });
+
+        // ===== GAME LOGIC =====
+        const gameData = {
+            answer: 'CERVEAU',
+            clue: 'Centre nerveux du corps / المركز العصبي للجسم',
+            extraLetters: ['T', 'M', 'N', 'K', 'P'],
+            points: 20
+        };
+
+        let gameState = {
+            selectedLetters: [],
+            availableLetters: [],
+            points: 0,
+            isChecking: false
+        };
+
+        // Show Game
+        function showGame(type) {
+            navigateTo('gamePage');
+            initGame();
+        }
+
+        // Initialize Game
+        function initGame() {
+            gameState = {
+                selectedLetters: [],
+                availableLetters: [],
+                points: 0,
+                isChecking: false
+            };
+
+            // Build shuffled letters
+            const answerLetters = gameData.answer.split('');
+            const allLetters = [...answerLetters, ...gameData.extraLetters];
+            gameState.availableLetters = shuffleArray(allLetters).map((letter, i) => ({
+                id: i,
+                letter: letter.toUpperCase(),
+                used: false
+            }));
+
+            // Update UI
+            document.getElementById('gameLevel').textContent = '1';
+            document.getElementById('gamePoints').textContent = '0';
+            document.getElementById('gameProgress').textContent = '1/1';
+            document.getElementById('gameProgressBar').style.width = '0%';
+            document.getElementById('gameClueText').textContent = gameData.clue;
+            document.getElementById('gameAnswerSlots').innerHTML = '';
+            document.getElementById('gameAnswerSlots').className = 'game-answer-slots';
+
+            renderGameChoices();
+        }
+
+        // Render Letter Choices
+        function renderGameChoices() {
+            const container = document.getElementById('gameLetterChoices');
+            container.innerHTML = '';
+            
+            gameState.availableLetters.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'game-letter-btn';
+                btn.innerHTML = `<span>${item.letter}</span>`;
+                btn.disabled = item.used;
+                btn.onclick = () => selectGameLetter(item.id);
+                container.appendChild(btn);
+            });
+        }
+
+        // Select Letter
+        function selectGameLetter(id) {
+            if (gameState.isChecking) return;
+            
+            const item = gameState.availableLetters.find(l => l.id === id);
+            if (!item || item.used) return;
+
+            item.used = true;
+            gameState.selectedLetters.push(id);
+
+            // Add to answer slots
+            const slot = document.createElement('div');
+            slot.className = 'game-letter-slot';
+            slot.textContent = item.letter;
+            slot.dataset.id = id;
+            slot.onclick = () => removeGameLetter(id);
+
+            document.getElementById('gameAnswerSlots').appendChild(slot);
+            renderGameChoices();
+        }
+
+        // Remove Letter
+        function removeGameLetter(id) {
+            if (gameState.isChecking) return;
+            
+            const item = gameState.availableLetters.find(l => l.id === id);
+            if (!item) return;
+
+            item.used = false;
+            gameState.selectedLetters = gameState.selectedLetters.filter(x => x !== id);
+
+            const slot = document.querySelector(`.game-letter-slot[data-id="${id}"]`);
+            if (slot) slot.remove();
+
+            renderGameChoices();
+        }
+
+        // Reset Letters
+        function resetGameLetters() {
+            if (gameState.isChecking) return;
+            
+            gameState.selectedLetters = [];
+            gameState.availableLetters.forEach(l => l.used = false);
+            
+            const slotsContainer = document.getElementById('gameAnswerSlots');
+            slotsContainer.innerHTML = '';
+            slotsContainer.className = 'game-answer-slots';
+            
+            renderGameChoices();
+        }
+
+        // Check Answer
+        function checkGameAnswer() {
+            if (gameState.isChecking) return;
+
+            const answer = gameState.selectedLetters
+                .map(id => gameState.availableLetters.find(l => l.id === id)?.letter)
+                .join('');
+
+            if (answer.length === 0) {
+                // Empty answer
+                const slots = document.getElementById('gameAnswerSlots');
+                slots.style.borderColor = 'var(--accent)';
+                setTimeout(() => { slots.style.borderColor = ''; }, 600);
+                return;
+            }
+
+            if (answer.toUpperCase() === gameData.answer.toUpperCase()) {
+                handleGameCorrect();
+            } else {
+                handleGameWrong();
+            }
+        }
+
+        // Handle Correct Answer
+        function handleGameCorrect() {
+            gameState.isChecking = true;
+            gameState.points += gameData.points;
+
+            // Animate slots
+            document.querySelectorAll('.game-letter-slot').forEach((s, i) => {
+                setTimeout(() => s.classList.add('correct-letter'), i * 80);
+            });
+            
+            document.getElementById('gameAnswerSlots').classList.add('correct');
+            document.getElementById('gameProgressBar').style.width = '100%';
+
+            setTimeout(() => {
+                showGameFeedback(true);
+                createGameParticles();
+            }, 600);
+        }
+
+        // Handle Wrong Answer
+        function handleGameWrong() {
+            gameState.isChecking = true;
+            const slotsContainer = document.getElementById('gameAnswerSlots');
+            slotsContainer.classList.add('wrong');
+
+            setTimeout(() => {
+                slotsContainer.classList.remove('wrong');
+                resetGameLetters();
+                gameState.isChecking = false;
+            }, 800);
+        }
+
+        // Show Feedback
+        function showGameFeedback(success) {
+            const messages = [
+                'إجابة ممتازة! 🌟',
+                'رائع جداً! 🚀',
+                'أحسنت! ⭐',
+                'ممتاز! 💪'
+            ];
+
+            const modal = document.createElement('div');
+            modal.className = 'game-feedback show';
+            modal.innerHTML = `
+                <div class="game-feedback-card">
+                    <span class="game-feedback-icon">✅</span>
+                    <div class="game-feedback-title success">إجابة صحيحة!</div>
+                    <div class="game-feedback-msg">${messages[Math.floor(Math.random() * messages.length)]}</div>
+                    <div class="game-feedback-points">+${gameData.points} نقطة 🏅</div>
+                    <button class="game-btn game-btn-primary" onclick="closeGameFeedback()">رائع! ←</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('gamePoints').textContent = gameState.points;
+        }
+
+        // Close Feedback
+        function closeGameFeedback() {
+            const modal = document.querySelector('.game-feedback');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+            gameState.isChecking = false;
+        }
+
+        // Create Particles
+        function createGameParticles() {
+            const container = document.createElement('div');
+            container.className = 'game-particles';
+            document.body.appendChild(container);
+
+            const colors = ['#6366f1', '#f59e0b', '#10b981', '#06b6d4', '#ec4899'];
+            
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'game-particle';
+                    
+                    const size = Math.random() * 10 + 5;
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    const tx = (Math.random() - 0.5) * 300;
+                    const ty = (Math.random() - 0.5) * 300;
+                    
+                    particle.style.cssText = `
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        --tx: ${tx}px;
+                        --ty: ${ty}px;
+                    `;
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1500);
+                }, i * 20);
+            }
+
+            setTimeout(() => container.remove(), 2000);
+        }
+
+        // Shuffle Array
+        function shuffleArray(arr) {
+            const array = [...arr];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ===== WORD SCRAMBLE GAME =====
+        const gameState = {
+            currentQuestion: {
+                answer: 'CERVEAU',
+                clue: 'centre nerveux du corps / المركز العصبي للجسم',
+                points: 20
+            },
+            selectedLetters: [],
+            availableLetters: [],
+            points: 0,
+            isChecking: false
+        };
+
+        // Initialize game
+        function initGame() {
+            const answerLetters = gameState.currentQuestion.answer.split('');
+            const extraLetters = ['T', 'M', 'N', 'K', 'P'];
+            const allLetters = [...answerLetters, ...extraLetters];
+            
+            gameState.availableLetters = shuffleArray(allLetters).map((letter, i) => ({
+                id: i,
+                letter,
+                used: false
+            }));
+
+            renderGameChoices();
+            updateGameHUD();
+        }
+
+        // Render choices
+        function renderGameChoices() {
+            const container = document.getElementById('gameLetterChoices');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            gameState.availableLetters.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'game-letter-btn';
+                btn.innerHTML = `<span>${item.letter}</span>`;
+                btn.disabled = item.used;
+                btn.onclick = () => selectGameLetter(item.id);
+                container.appendChild(btn);
+            });
+        }
+
+        // Select letter
+        function selectGameLetter(id) {
+            if (gameState.isChecking) return;
+            
+            const item = gameState.availableLetters.find(l => l.id === id);
+            if (!item || item.used) return;
+
+            item.used = true;
+            gameState.selectedLetters.push(id);
+
+            const slot = document.createElement('div');
+            slot.className = 'game-letter-slot';
+            slot.textContent = item.letter;
+            slot.dataset.id = id;
+            slot.onclick = () => removeGameLetter(id);
+
+            const container = document.getElementById('gameAnswerSlots');
+            if (container) container.appendChild(slot);
+
+            renderGameChoices();
+        }
+
+        // Remove letter
+        function removeGameLetter(id) {
+            if (gameState.isChecking) return;
+            
+            const item = gameState.availableLetters.find(l => l.id === id);
+            if (!item) return;
+
+            item.used = false;
+            gameState.selectedLetters = gameState.selectedLetters.filter(x => x !== id);
+
+            const slot = document.querySelector(`.game-letter-slot[data-id="${id}"]`);
+            if (slot) slot.remove();
+
+            renderGameChoices();
+        }
+
+        // Reset
+        function resetGameLetters() {
+            if (gameState.isChecking) return;
+            
+            gameState.selectedLetters = [];
+            gameState.availableLetters.forEach(l => l.used = false);
+            
+            const answerSlots = document.getElementById('gameAnswerSlots');
+            if (answerSlots) {
+                answerSlots.innerHTML = '';
+                answerSlots.className = 'game-answer-slots';
+            }
+            
+            renderGameChoices();
+        }
+
+        // Check answer
+        function checkGameAnswer() {
+            if (gameState.isChecking) return;
+            
+            const answer = gameState.selectedLetters
+                .map(id => gameState.availableLetters.find(l => l.id === id)?.letter)
+                .join('');
+
+            if (answer.toUpperCase() === gameState.currentQuestion.answer.toUpperCase()) {
+                handleGameCorrect();
+            } else if (answer.length === 0) {
+                shakeGameEmpty();
+            } else {
+                handleGameWrong();
+            }
+        }
+
+        // Correct
+        function handleGameCorrect() {
+            gameState.isChecking = true;
+            gameState.points += gameState.currentQuestion.points;
+
+            document.querySelectorAll('.game-letter-slot').forEach((s, i) => {
+                setTimeout(() => s.classList.add('correct-letter'), i * 80);
+            });
+            
+            const answerSlots = document.getElementById('gameAnswerSlots');
+            if (answerSlots) answerSlots.classList.add('correct');
+
+            setTimeout(() => {
+                showGameFeedback();
+                spawnGameParticles();
+                showGameFloatingPoints(gameState.currentQuestion.points);
+                updateGameHUD();
+            }, 500);
+        }
+
+        // Wrong
+        function handleGameWrong() {
+            gameState.isChecking = true;
+            const answerSlots = document.getElementById('gameAnswerSlots');
+            if (answerSlots) answerSlots.classList.add('wrong');
+
+            setTimeout(() => {
+                if (answerSlots) answerSlots.classList.remove('wrong');
+                resetGameLetters();
+                gameState.isChecking = false;
+            }, 800);
+        }
+
+        // Shake
+        function shakeGameEmpty() {
+            const slots = document.getElementById('gameAnswerSlots');
+            if (!slots) return;
+            
+            slots.style.borderColor = 'var(--accent)';
+            slots.style.boxShadow = '0 0 20px rgba(245, 158, 11, 0.4)';
+            
+            setTimeout(() => {
+                slots.style.borderColor = '';
+                slots.style.boxShadow = '';
+            }, 600);
+        }
+
+        // Feedback
+        function showGameFeedback() {
+            const messages = [
+                'إجابة ممتازة! 🌟',
+                'رائع جداً! 🚀',
+                'أحسنت! ⭐',
+                'إجابة صحيحة! 💪'
+            ];
+
+            const overlay = document.createElement('div');
+            overlay.className = 'game-feedback active';
+            overlay.innerHTML = `
+                <div class="game-feedback-card">
+                    <span class="game-feedback-icon">✅</span>
+                    <div class="game-feedback-title success">إجابة صحيحة!</div>
+                    <div class="game-feedback-msg">${messages[Math.floor(Math.random() * messages.length)]}</div>
+                    <div class="game-feedback-points">+${gameState.currentQuestion.points} نقطة 🏅</div>
+                    <button class="game-btn game-btn-primary" onclick="closeGameFeedback()">رائع! ✨</button>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+        }
+
+        // Close feedback
+        function closeGameFeedback() {
+            const feedback = document.querySelector('.game-feedback');
+            if (feedback) feedback.remove();
+        }
+
+        // Update HUD
+        function updateGameHUD() {
+            const pointsEl = document.getElementById('gamePoints');
+            if (pointsEl) pointsEl.textContent = gameState.points;
+            
+            const progressBar = document.getElementById('gameProgressBar');
+            if (progressBar) progressBar.style.width = '100%';
+        }
+
+        // Particles
+        function spawnGameParticles(count = 30) {
+            const colors = ['#6366f1', '#f59e0b', '#10b981', '#06b6d4'];
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const p = document.createElement('div');
+                    const size = Math.random() * 12 + 6;
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    const dur = (Math.random() * 1 + 0.8).toFixed(2);
+
+                    p.style.cssText = `
+                        width:${size}px; height:${size}px;
+                        left:${x}px; top:${y}px;
+                        background:${colors[Math.floor(Math.random() * colors.length)]};
+                        position: fixed; border-radius: 50%; pointer-events: none; z-index: 150;
+                        animation: particleFly ${dur}s ease-out forwards;
+                    `;
+                    
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), parseFloat(dur) * 1000);
+                }, i * 30);
+            }
+        }
+
+        // Floating points
+        function showGameFloatingPoints(pts) {
+            const el = document.createElement('div');
+            el.className = 'float-points';
+            el.textContent = `+${pts}`;
+            el.style.cssText = 'left:50%; top:50%; transform:translate(-50%,-50%);';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1600);
+        }
+
+        // CSS for particles
+        if (!document.getElementById('particleStyle')) {
+            const style = document.createElement('style');
+            style.id = 'particleStyle';
+            style.textContent = `
+                @keyframes particleFly {
+                    0% { transform: translate(0,0) scale(1); opacity: 1; }
+                    100% { transform: translate(${(Math.random()-0.5)*300}px, ${(Math.random()-0.5)*300}px) scale(0); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Init on navigate
+        const origNav = navigateTo;
+        navigateTo = function(page) {
+            origNav(page);
+            if (page === 'wordScramble') setTimeout(initGame, 100);
+        };
     </script>
 </body>
 </html>
