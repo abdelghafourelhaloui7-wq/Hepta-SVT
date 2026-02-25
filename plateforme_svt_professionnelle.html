@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme SVT</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f9;
+        }
+
+        header {
+            background: #1e88e5;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            background: #1565c0;
+            padding: 0.5rem;
+        }
+
+        nav button {
+            background: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        section {
+            display: none;
+            padding: 2rem;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        input, button {
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .score {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Plateforme Interactive SVT</h1>
+</header>
+
+<nav>
+    <button data-route="home">Accueil</button>
+    <button data-route="game">Jeu</button>
+</nav>
+
+<section id="home" class="active">
+    <div class="card">
+        <h2>Bienvenue</h2>
+        <input type="text" id="username" placeholder="Entrez votre nom">
+        <button id="saveUser">Commencer</button>
+        <p id="welcomeMessage"></p>
+    </div>
+</section>
+
+<section id="game">
+    <div class="card">
+        <h2>Quiz</h2>
+        <p id="question"></p>
+        <input type="text" id="answerInput" placeholder="Votre réponse">
+        <button id="submitAnswer">Valider</button>
+        <p class="score" id="scoreDisplay"></p>
+    </div>
+</section>
+
+<script>
+
+function sanitizeInput(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+class Router {
+    constructor() {
+        this.sections = document.querySelectorAll('section');
+        this.init();
+    }
+
+    init() {
+        document.querySelectorAll('[data-route]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.navigate(btn.dataset.route);
+            });
+        });
+    }
+
+    navigate(route) {
+        this.sections.forEach(sec => sec.classList.remove('active'));
+        document.getElementById(route).classList.add('active');
+        history.pushState({route}, '', `#${route}`);
+    }
+}
+
+class Game {
+    constructor() {
+        this.score = parseInt(localStorage.getItem('score')) || 0;
+        this.currentQuestionIndex = 0;
+
+        this.questions = [
+            { question: "Quel organe contrôle le système nerveux ?", answer: "cerveau" },
+            { question: "Quelle cellule transporte l'influx nerveux ?", answer: "neurone" }
+        ];
+
+        this.questionElement = document.getElementById('question');
+        this.answerInput = document.getElementById('answerInput');
+        this.scoreDisplay = document.getElementById('scoreDisplay');
+        this.submitButton = document.getElementById('submitAnswer');
+
+        this.submitButton.addEventListener('click', () => this.checkAnswer());
+
+        this.updateUI();
+    }
+
+    normalize(text) {
+        return text.trim().toLowerCase();
+    }
+
+    checkAnswer() {
+        const userAnswer = this.normalize(this.answerInput.value);
+        const correctAnswer = this.normalize(this.questions[this.currentQuestionIndex].answer);
+
+        if(userAnswer === correctAnswer) {
+            this.score++;
+            alert("Bonne réponse !");
+        } else {
+            alert("Réponse incorrecte.");
+        }
+
+        this.currentQuestionIndex = (this.currentQuestionIndex + 1) % this.questions.length;
+        localStorage.setItem('score', this.score);
+        this.answerInput.value = '';
+        this.updateUI();
+    }
+
+    updateUI() {
+        this.questionElement.textContent = this.questions[this.currentQuestionIndex].question;
+        this.scoreDisplay.textContent = "Score : " + this.score;
+    }
+}
+
+function initUserSystem() {
+    const saveBtn = document.getElementById('saveUser');
+    const usernameInput = document.getElementById('username');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+
+    const savedUser = localStorage.getItem('username');
+    if(savedUser) {
+        welcomeMessage.textContent = "Bienvenue " + savedUser;
+    }
+
+    saveBtn.addEventListener('click', () => {
+        const name = sanitizeInput(usernameInput.value);
+        if(name.length > 0) {
+            localStorage.setItem('username', name);
+            welcomeMessage.textContent = "Bienvenue " + name;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new Router();
+    new Game();
+    initUserSystem();
+});
+
+</script>
+
+</body>
+</html>
