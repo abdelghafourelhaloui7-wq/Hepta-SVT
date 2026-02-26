@@ -1,0 +1,2946 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hepta-SVT - منصة علوم الحياة والأرض</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #6366f1;
+    --secondary: #06b6d4;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --dark: #0f172a;
+    --white: #ffffff;
+    --gray: #64748b;
+    --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.bg-animation {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.bg-animation::before, .bg-animation::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    animation: float 20s infinite ease-in-out;
+}
+
+.bg-animation::before {
+    width: 600px;
+    height: 600px;
+    background: var(--primary);
+    top: -200px;
+    right: -200px;
+}
+
+.bg-animation::after {
+    width: 500px;
+    height: 500px;
+    background: var(--secondary);
+    bottom: -150px;
+    left: -150px;
+    animation-delay: 5s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(50px, -50px); }
+    50% { transform: translate(-30px, 30px); }
+    75% { transform: translate(40px, 40px); }
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+}
+
+.menu-btn {
+    width: 45px;
+    height: 45px;
+    background: var(--gradient-main);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--white);
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 700;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(30px);
+    padding: 90px 20px 20px;
+    transition: 0.3s;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.sidebar.active { right: 0; }
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 998;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s;
+}
+
+.sidebar-item:hover, .sidebar-item.active {
+    background: var(--gradient-main);
+}
+
+.main {
+    margin-top: 70px;
+    padding: 5px 20px 30px 20px;
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 70px);
+}
+
+.page {
+    display: none;
+    animation: fadeInUp 0.5s;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.page > h2:first-child,
+.page > .hero:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.page.active { display: block; }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero {
+    background: var(--gradient-main);
+    border-radius: 16px;
+    padding: 50px 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-main);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--white);
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.btn {
+    padding: 14px 30px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+    font-family: 'Cairo', sans-serif;
+}
+
+.btn-primary {
+    background: var(--gradient-main);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--gray);
+}
+
+.btn-ghost:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    color: var(--white);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: var(--white);
+}
+
+/* Game HUD */
+.game-hud {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    z-index: 999;
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.game-hud.active {
+    display: grid;
+}
+
+.hud-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.hud-label {
+    font-size: 10px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.hud-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.hud-value.points { color: var(--accent); }
+.hud-value.timer { color: var(--success); }
+
+/* Levels Grid */
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.level-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.level-card:not(.locked):hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+}
+
+.level-card.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.level-number {
+    font-size: 48px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.level-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.level-stars {
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+.level-lock {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 24px;
+}
+
+/* Game Content */
+.game-content {
+    margin-top: 100px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.question-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+}
+
+.clue-box {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.clue-label {
+    font-size: 12px;
+    color: var(--secondary);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.clue-text {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.answer-section {
+    margin-bottom: 25px;
+}
+
+.answer-label {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.answer-slots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    min-height: 65px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 10px;
+    direction: ltr;
+    overflow-x: auto;
+}
+
+.answer-slots.correct {
+    border-color: var(--success);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.answer-slots.wrong {
+    border-color: var(--danger);
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.empty-slot {
+    min-width: 45px;
+    width: 45px;
+    height: 52px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary);
+    flex-shrink: 0;
+    animation: popIn 0.3s;
+}
+
+.empty-slot.filled {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--primary);
+    cursor: pointer;
+}
+
+.empty-slot.filled:hover {
+    transform: scale(1.1);
+}
+
+.empty-slot.hint {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.choices-section {
+    margin-bottom: 20px;
+}
+
+.choices-label {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.letter-choices {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    direction: ltr;
+}
+
+.letter-btn {
+    width: 52px;
+    height: 56px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));
+    border: 2px solid rgba(99, 102, 241, 0.4);
+    border-radius: 12px;
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.letter-btn:hover:not(:disabled) {
+    transform: translateY(-4px) scale(1.05);
+    border-color: var(--primary);
+}
+
+.letter-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.game-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Feedback */
+.feedback-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.feedback-overlay.active { display: flex; }
+
+.feedback-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    animation: bounceIn 0.5s;
+    max-width: 90%;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.feedback-icon {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.feedback-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.feedback-title.success { color: var(--success); }
+
+.feedback-msg {
+    font-size: 15px;
+    color: var(--gray);
+    margin-bottom: 15px;
+}
+
+.feedback-points {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+/* Level Complete */
+.level-complete {
+    max-width: 600px;
+}
+
+.level-complete-title {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.level-stats {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    color: var(--gray);
+}
+
+.stat-value {
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent);
+}
+
+/* Leaderboard */
+.leaderboard {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.leaderboard-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.leaderboard-table {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 110px 100px;
+    gap: 15px;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    align-items: center;
+    transition: 0.3s;
+}
+
+.leaderboard-row:hover:not(.header) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.leaderboard-row:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-row.header {
+    background: rgba(99, 102, 241, 0.15);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.leaderboard-rank {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.leaderboard-name {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.leaderboard-score {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--success);
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+}
+
+.leaderboard-time {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 20px;
+}
+
+.popup.active { display: flex; }
+
+.popup-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 85vh;
+}
+
+.popup-img {
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: 16px;
+}
+
+.popup-close {
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 50px;
+    height: 50px;
+    background: var(--white);
+    color: var(--dark);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title { font-size: 32px; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .game-hud { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px; }
+    .hud-value { font-size: 18px; }
+    .empty-slot { min-width: 38px; width: 38px; height: 46px; font-size: 22px; }
+    .letter-btn { width: 46px; height: 50px; font-size: 20px; }
+    .answer-slots { gap: 4px; }
+    .question-card { padding: 20px; }
+    .leaderboard-row { grid-template-columns: 50px 1fr 90px 80px; gap: 10px; padding: 12px 15px; }
+    .feedback-card { padding: 30px 25px; }
+}
+
+@media (max-width: 480px) {
+    .empty-slot { min-width: 32px; width: 32px; height: 40px; font-size: 18px; }
+    .answer-slots { gap: 3px; padding: 10px 5px; }
+}
+</style>
+</head>
+<body>
+<div class="bg-animation"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <h1 class="logo-text">Hepta-SVT</h1>
+    <div id="userNameDisplay" style="display:none;font-size:13px;font-weight:600;background:rgba(255,255,255,0.08);padding:6px 12px;border-radius:8px;">
+        👤 <span id="userNameText"></span>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-item active" onclick="navigateTo('dashboard')">
+        <span>🏠</span>
+        <span>الصفحة الرئيسية</span>
+    </div>
+    <div class="sidebar-item" onclick="navigateTo('lessons')">
+        <span>📚</span>
+        <span>الدروس</span>
+    </div>
+    <div class="sidebar-item" onclick="navigateTo('tests')">
+        <span>✍️</span>
+        <span>اختبر نفسك</span>
+    </div>
+    <div class="sidebar-item" onclick="navigateTo('laboratory')">
+        <span>🧪</span>
+        <span>المختبر</span>
+    </div>
+    <div class="sidebar-item" onclick="navigateTo('exercises')">
+        <span>📝</span>
+        <span>سلاسل التمارين</span>
+    </div>
+    <div class="sidebar-item" onclick="navigateTo('videos')">
+        <span>🎥</span>
+        <span>فيديوهات تعليمية</span>
+    </div>
+</aside>
+
+<!-- HUD -->
+<div class="game-hud" id="gameHud">
+    <div class="hud-item">
+        <div class="hud-label">المستوى</div>
+        <div class="hud-value" id="hudLevel">1</div>
+    </div>
+    <div class="hud-item">
+        <div class="hud-label">الاختبار</div>
+        <div class="hud-value" id="hudQuestion">1/10</div>
+    </div>
+    <div class="hud-item">
+        <div class="hud-label">النقاط</div>
+        <div class="hud-value points" id="hudPoints">0</div>
+    </div>
+    <div class="hud-item">
+        <div class="hud-label">الوقت</div>
+        <div class="hud-value timer" id="hudTimer">00:00</div>
+    </div>
+</div>
+
+<!-- Main -->
+<main class="main">
+
+<!-- Name Input Screen -->
+<section id="nameScreen" class="page active">
+    <div style="max-width:500px;margin:80px auto;text-align:center;">
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:50px 40px;">
+            <div style="font-size:70px;margin-bottom:15px;">👋</div>
+            <h2 style="font-size:32px;font-weight:800;margin-bottom:10px;">مرحباً بك!</h2>
+            <p style="color:var(--gray);margin-bottom:30px;">أدخل اسمك الكامل للبدء</p>
+            
+            <input type="text" id="firstName" placeholder="الاسم..." maxlength="20" 
+                   style="width:100%;padding:15px 20px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--white);font-size:18px;font-family:'Cairo',sans-serif;margin-bottom:15px;text-align:center;"
+                   onkeyup="checkNameInput()">
+            
+            <input type="text" id="lastName" placeholder="النسب..." maxlength="20"
+                   style="width:100%;padding:15px 20px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--white);font-size:18px;font-family:'Cairo',sans-serif;margin-bottom:15px;text-align:center;"
+                   onkeyup="checkNameInput()" onkeypress="if(event.key==='Enter') submitName()">
+            
+            <div id="nameError" style="display:none;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:15px;margin-bottom:20px;font-size:14px;color:var(--danger);">
+                ⚠️ هذا الاسم مسجل بالفعل! الرجاء استخدام اسم آخر
+            </div>
+            
+            <button class="btn btn-primary" id="startBtn" onclick="submitName()" disabled>دخول المنصة 🚀</button>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard -->
+
+<section id="dashboard" class="page">
+    
+    <!-- Fixed Welcome Section -->
+    <div style="text-align:center;margin-bottom:40px;">
+        <p style="font-size:18px;color:rgba(255,255,255,0.7);margin-bottom:8px;">مرحباً بكم في</p>
+        <h1 style="font-size:48px;font-weight:900;margin:0 0 10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Hepta-SVT</h1>
+        <p style="font-size:16px;color:rgba(255,255,255,0.6);max-width:500px;margin:0 auto;">منصة خاصة بمادة علوم الحياة والأرض</p>
+    </div>
+    
+    <!-- Rotating Cards Container (No Arrows) -->
+    <div style="position:relative;max-width:650px;margin:0 auto;">
+        <div style="position:relative;min-height:480px;">
+            
+            <!-- Card 1: ملخصات الدروس -->
+            <div class="carousel-slide" style="position:absolute;width:100%;opacity:1;visibility:visible;z-index:2;transition:opacity 0.6s ease;padding:45px;background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(37,99,235,0.05));border:2px solid rgba(59,130,246,0.3);border-radius:20px;text-align:center;">
+                <div style="width:90px;height:90px;background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 30px;box-shadow:0 10px 30px rgba(59,130,246,0.3);">📚</div>
+                <h3 style="font-size:32px;font-weight:800;margin-bottom:18px;color:white;">ملخصات الدروس</h3>
+                <p style="font-size:17px;line-height:1.9;color:rgba(255,255,255,0.85);margin-bottom:30px;">
+                    استكشف ملخصات شاملة ومفصلة<br>
+                    لجميع دروس المنهج
+                </p>
+                <div style="padding:18px;background:rgba(0,0,0,0.25);border-radius:14px;margin-bottom:25px;">
+                    <span style="font-size:16px;color:rgba(255,255,255,0.8);">📖 6 دروس متاحة</span>
+                </div>
+                <button onclick="navigateTo('lessons')" class="btn btn-primary" style="width:100%;padding:18px;font-size:18px;font-weight:700;border-radius:14px;">
+                    شاهد الملخصات →
+                </button>
+            </div>
+            
+            <!-- Card 2: الاختبارات -->
+            <div class="carousel-slide" style="position:absolute;width:100%;opacity:0;visibility:hidden;z-index:1;transition:opacity 0.6s ease;padding:45px;background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.05));border:2px solid rgba(16,185,129,0.3);border-radius:20px;text-align:center;">
+                <div style="width:90px;height:90px;background:linear-gradient(135deg,#10b981,#059669);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 30px;box-shadow:0 10px 30px rgba(16,185,129,0.3);">✍️</div>
+                <h3 style="font-size:32px;font-weight:800;margin-bottom:18px;color:white;">اختبر تمكنك</h3>
+                <p style="font-size:17px;line-height:1.9;color:rgba(255,255,255,0.85);margin-bottom:30px;">
+                    اختبارات معرفية ومهارية<br>
+                    لقياس مستواك الحقيقي
+                </p>
+                <div style="padding:18px;background:rgba(0,0,0,0.25);border-radius:14px;margin-bottom:25px;">
+                    <span style="font-size:16px;color:rgba(255,255,255,0.8);">📊 اختبارات متنوعة</span>
+                </div>
+                <button onclick="navigateTo('tests')" class="btn btn-primary" style="width:100%;padding:18px;font-size:18px;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);border-radius:14px;">
+                    ابدأ الاختبار →
+                </button>
+            </div>
+            
+            <!-- Card 3: الألعاب التربوية -->
+            <div class="carousel-slide" style="position:absolute;width:100%;opacity:0;visibility:hidden;z-index:1;transition:opacity 0.6s ease;padding:45px;background:linear-gradient(135deg,rgba(249,115,22,0.15),rgba(234,88,12,0.05));border:2px solid rgba(249,115,22,0.3);border-radius:20px;text-align:center;">
+                <div style="width:90px;height:90px;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 30px;box-shadow:0 10px 30px rgba(249,115,22,0.3);">🎮</div>
+                <h3 style="font-size:32px;font-weight:800;margin-bottom:18px;color:white;">ألعاب تربوية</h3>
+                <p style="font-size:17px;line-height:1.9;color:rgba(255,255,255,0.85);margin-bottom:30px;">
+                    العب الآن وحسّن ترتيبك<br>
+                    تعلم بطريقة ممتعة وتفاعلية
+                </p>
+                <div style="padding:18px;background:rgba(0,0,0,0.25);border-radius:14px;margin-bottom:25px;">
+                    <span style="font-size:16px;color:rgba(255,255,255,0.8);">🏆 تنافس مع الآخرين</span>
+                </div>
+                <button onclick="navigateTo('levelsScreen')" class="btn btn-primary" style="width:100%;padding:18px;font-size:18px;font-weight:700;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:14px;">
+                    العب الآن →
+                </button>
+            </div>
+            
+            <!-- Card 4: التجارب التفاعلية -->
+            <div class="carousel-slide" style="position:absolute;width:100%;opacity:0;visibility:hidden;z-index:1;transition:opacity 0.6s ease;padding:45px;background:linear-gradient(135deg,rgba(236,72,153,0.15),rgba(219,39,119,0.05));border:2px solid rgba(236,72,153,0.3);border-radius:20px;text-align:center;">
+                <div style="width:90px;height:90px;background:linear-gradient(135deg,#ec4899,#db2777);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 30px;box-shadow:0 10px 30px rgba(236,72,153,0.3);">🔬</div>
+                <h3 style="font-size:32px;font-weight:800;margin-bottom:18px;color:white;">تجارب تفاعلية</h3>
+                <p style="font-size:17px;line-height:1.9;color:rgba(255,255,255,0.85);margin-bottom:30px;">
+                    اجعل الدرس أكثر متعة<br>
+                    من خلال تجارب علمية تفاعلية
+                </p>
+                <div style="padding:18px;background:rgba(0,0,0,0.25);border-radius:14px;margin-bottom:25px;">
+                    <span style="font-size:16px;color:rgba(255,255,255,0.8);">🧪 تجارب مذهلة</span>
+                </div>
+                <button onclick="navigateTo('laboratory')" class="btn btn-primary" style="width:100%;padding:18px;font-size:18px;font-weight:700;background:linear-gradient(135deg,#ec4899,#db2777);border-radius:14px;">
+                    استكشف التجارب →
+                </button>
+            </div>
+            
+            <!-- Card 5: الجديد في المنصة -->
+            <div class="carousel-slide" style="position:absolute;width:100%;opacity:0;visibility:hidden;z-index:1;transition:opacity 0.6s ease;padding:45px;background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(147,51,234,0.05));border:2px solid rgba(168,85,247,0.3);border-radius:20px;text-align:center;">
+                <div style="width:90px;height:90px;background:linear-gradient(135deg,#a855f7,#9333ea);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 30px;box-shadow:0 10px 30px rgba(168,85,247,0.3);">⭐</div>
+                <h3 style="font-size:32px;font-weight:800;margin-bottom:18px;color:white;">جديد المنصة</h3>
+                <p style="font-size:17px;line-height:1.9;color:rgba(255,255,255,0.85);margin-bottom:30px;">
+                    60 ملف PDF تمارين<br>
+                    وامتحانات جهوية متاحة الآن!
+                </p>
+                <div style="padding:18px;background:rgba(0,0,0,0.25);border-radius:14px;margin-bottom:25px;">
+                    <span style="font-size:16px;color:rgba(255,255,255,0.8);">🆕 تم الإضافة اليوم</span>
+                </div>
+                <button onclick="navigateTo('exercises')" class="btn btn-primary" style="width:100%;padding:18px;font-size:18px;font-weight:700;background:linear-gradient(135deg,#a855f7,#9333ea);border-radius:14px;">
+                    استكشف الآن →
+                </button>
+            </div>
+            
+        </div>
+        
+        <!-- Dots Navigation -->
+        <div style="display:flex;justify-content:center;gap:12px;margin-top:35px;">
+            <div class="carousel-dot" onclick="goToCard(0)" style="width:14px;height:14px;border-radius:50%;background:var(--primary);cursor:pointer;transition:all 0.3s;transform:scale(1.3);"></div>
+            <div class="carousel-dot" onclick="goToCard(1)" style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;"></div>
+            <div class="carousel-dot" onclick="goToCard(2)" style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;"></div>
+            <div class="carousel-dot" onclick="goToCard(3)" style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;"></div>
+            <div class="carousel-dot" onclick="goToCard(4)" style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;"></div>
+        </div>
+        
+    </div>
+</section>
+
+<!-- Lessons -->
+<section id="lessons" class="page">
+    <h2 style="margin-bottom:25px;font-size:28px;">📚 الدروس المتاحة</h2>
+    <div class="cards-grid">
+        <div class="card" onclick="openLesson('nervous')">
+            <div class="card-icon">🧠</div>
+            <h3 class="card-title">Le système nerveux</h3>
+            <p class="card-description">دراسة شاملة للجهاز العصبي</p>
+        </div>
+        <div class="card" onclick="openLesson('muscular')">
+            <div class="card-icon">💪</div>
+            <h3 class="card-title">Le système musculaire</h3>
+            <p class="card-description">تعرف على دور العضلات</p>
+        </div>
+        <div class="card" onclick="showImage('microbes.jpg')">
+            <div class="card-icon">🦠</div>
+            <h3 class="card-title">Les microbes</h3>
+            <p class="card-description">عالم الكائنات الدقيقة</p>
+        </div>
+        <div class="card" onclick="openLesson('immune')">
+            <div class="card-icon">🛡️</div>
+            <h3 class="card-title">Le système immunitaire</h3>
+            <p class="card-description">المناعة الطبيعية والمكتسبة</p>
+        </div>
+        <div class="card" onclick="openLesson('dysfunction')">
+            <div class="card-icon">🔴</div>
+            <h3 class="card-title">Dysfonctionnements immunitaires</h3>
+            <p class="card-description">الحساسية والإيدز</p>
+        </div>
+        <div class="card" onclick="showImage('transfusion.jpg')">
+            <div class="card-icon">💉</div>
+            <h3 class="card-title">La transfusion sanguine</h3>
+            <p class="card-description">فصائل الدم ونقل الدم</p>
+        </div>
+    </div>
+</section>
+
+<!-- Lesson Details -->
+<section id="lessonDetails" class="page">
+    <button class="back-btn" onclick="navigateTo('lessons')">→ العودة للدروس</button>
+    <h2 id="lessonTitle" style="margin-bottom:25px;font-size:28px;"></h2>
+    <div class="cards-grid" id="lessonParagraphs"></div>
+</section>
+
+<!-- Tests -->
+<section id="tests" class="page">
+    <h2 style="margin-top:0;margin-bottom:30px;font-size:28px;">✍️ اختبر نفسك</h2>
+    <div class="cards-grid">
+        <div class="card" onclick="navigateTo('knowledgeTests')">
+            <div class="card-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">📝</div>
+            <h3 class="card-title">اختبارات معرفية</h3>
+            <p class="card-description">اختبر معرفتك النظرية في 3 مستويات</p>
+        </div>
+        <div class="card" onclick="navigateTo('skillTests')">
+            <div class="card-icon" style="background:linear-gradient(135deg,#10b981,#059669);">🎯</div>
+            <h3 class="card-title">اختبارات مهارية</h3>
+            <p class="card-description">اختبر قدرتك على التطبيق العملي</p>
+        </div>
+        <div class="card" onclick="navigateTo('levelsScreen')">
+            <div class="card-icon" style="background:linear-gradient(135deg,#f97316,#ea580c);">🎮</div>
+            <h3 class="card-title">ألعاب تربوية</h3>
+            <p class="card-description">تعلم وتسلى في نفس الوقت</p>
+        </div>
+    </div>
+</section>
+
+<!-- Knowledge Tests (اختبارات معرفية) -->
+<section id="knowledgeTests" class="page">
+    <button class="back-btn" onclick="navigateTo('tests')">→ الرجوع</button>
+    <h2 style="margin-top:0;margin-bottom:30px;font-size:28px;">📝 اختبارات معرفية</h2>
+    <div style="max-width:900px;margin:0 auto;">
+        <div class="cards-grid">
+            <div class="card" onclick="startKnowledgeQuiz('easy')">
+                <div class="card-icon" style="background:linear-gradient(135deg,#10b981,#059669);">😊</div>
+                <h3 class="card-title">المستوى السهل</h3>
+                <p class="card-description">20 سؤالاً<br>15 إجابة صحيحة للنجاح</p>
+            </div>
+            <div class="card" onclick="startKnowledgeQuiz('medium')">
+                <div class="card-icon" style="background:linear-gradient(135deg,#f59e0b,#f97316);">🤔</div>
+                <h3 class="card-title">المستوى المتوسط</h3>
+                <p class="card-description">30 سؤالاً (QCM + صح/خطأ + صل بسهم)<br>25 إجابة صحيحة للنجاح</p>
+            </div>
+            <div class="card" onclick="startKnowledgeQuiz('hard')">
+                <div class="card-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626);">😤</div>
+                <h3 class="card-title">المستوى الصعب</h3>
+                <p class="card-description">40 سؤالاً (6 أنواع متنوعة)<br>35 إجابة صحيحة للنجاح</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skill Tests (اختبارات مهارية) -->
+<section id="skillTests" class="page">
+    <button class="back-btn" onclick="navigateTo('tests')">→ الرجوع</button>
+    <h2 style="margin-top:0;margin-bottom:30px;font-size:28px;">🎯 اختبارات مهارية</h2>
+    <div style="max-width:900px;margin:0 auto;">
+        <div class="cards-grid">
+            <div class="card" style="opacity:0.6;cursor:not-allowed;">
+                <div class="card-icon" style="background:linear-gradient(135deg,#10b981,#059669);">😊</div>
+                <h3 class="card-title">المستوى السهل</h3>
+                <p class="card-description">اختبارات تطبيقية بسيطة</p>
+                <div style="margin-top:10px;padding:5px 12px;background:var(--accent);border-radius:20px;display:inline-block;font-size:12px;">قريباً</div>
+            </div>
+            <div class="card" style="opacity:0.6;cursor:not-allowed;">
+                <div class="card-icon" style="background:linear-gradient(135deg,#f59e0b,#f97316);">🤔</div>
+                <h3 class="card-title">المستوى المتوسط</h3>
+                <p class="card-description">اختبارات تطبيقية متوسطة</p>
+                <div style="margin-top:10px;padding:5px 12px;background:var(--accent);border-radius:20px;display:inline-block;font-size:12px;">قريباً</div>
+            </div>
+            <div class="card" style="opacity:0.6;cursor:not-allowed;">
+                <div class="card-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626);">😤</div>
+                <h3 class="card-title">المستوى الصعب</h3>
+                <p class="card-description">اختبارات تطبيقية صعبة</p>
+                <div style="margin-top:10px;padding:5px 12px;background:var(--accent);border-radius:20px;display:inline-block;font-size:12px;">قريباً</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quiz Screen -->
+<section id="quizScreen" class="page">
+    <button class="back-btn" onclick="navigateTo('knowledgeTests')">→ الرجوع</button>
+    <div style="margin-top:20px;max-width:900px;margin-left:auto;margin-right:auto;">
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;margin-bottom:25px;display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
+            <div style="text-align:center;">
+                <div style="font-size:12px;color:var(--gray);margin-bottom:5px;">السؤال</div>
+                <div style="font-size:24px;font-weight:700;color:var(--primary);" id="quizProgress">1/20</div>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:12px;color:var(--gray);margin-bottom:5px;">صحيحة</div>
+                <div style="font-size:24px;font-weight:700;color:var(--success);" id="quizCorrect">0</div>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:12px;color:var(--gray);margin-bottom:5px;">خاطئة</div>
+                <div style="font-size:24px;font-weight:700;color:var(--danger);" id="quizWrong">0</div>
+            </div>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:40px;">
+            <h3 style="font-size:22px;font-weight:700;margin-bottom:30px;line-height:1.8;text-align:center;" id="quizQuestion"></h3>
+            <div id="quizOptions" style="display:flex;flex-direction:column;gap:15px;"></div>
+            <div id="quizFeedback" style="display:none;margin-top:25px;padding:20px;border-radius:12px;"></div>
+            <button id="quizNextBtn" style="display:none;margin-top:20px;width:100%;" class="btn btn-primary" onclick="nextQuizQuestion()">السؤال التالي →</button>
+        </div>
+    </div>
+</section>
+
+<!-- Laboratory -->
+<section id="laboratory" class="page">
+    <h2 style="margin-bottom:25px;font-size:28px;">🧪 المختبر الافتراضي</h2>
+    <div style="text-align:center;padding:80px 20px;">
+        <div style="font-size:80px;opacity:0.3;">🔬</div>
+        <h3 style="font-size:24px;margin:20px 0 10px;">قريباً جداً!</h3>
+        <p style="color:var(--gray);line-height:1.8;">
+            نعمل على إضافة تجارب تفاعلية مذهلة<br>
+            ستجعل من فهمك للدروس أكثر بساطة ومتعة
+        </p>
+    </div>
+</section>
+
+<!-- Exercises -->
+<section id="exercises" class="page">
+    <h2 style="margin-top:0;margin-bottom:35px;font-size:28px;">📝 تمارين</h2>
+    
+    <!-- Les fonctions de relation -->
+    <div style="background:rgba(59,130,246,0.08);border:2px solid rgba(59,130,246,0.2);border-radius:18px;padding:30px;margin-bottom:25px;transition:0.3s;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.2)'">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleExerciseSection('fonctions')">
+            <div style="display:flex;align-items:center;gap:18px;">
+                <div style="width:65px;height:65px;background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(59,130,246,0.3);">🧠</div>
+                <div>
+                    <h3 style="font-size:26px;font-weight:800;margin:0 0 8px;color:white;">Les fonctions de relation</h3>
+                    <p style="font-size:15px;color:rgba(255,255,255,0.6);margin:0;">20 séries d'exercices • سيضاف قريباً</p>
+                </div>
+            </div>
+            <div id="fonctionsArrow" style="font-size:28px;color:rgba(255,255,255,0.4);transition:transform 0.3s;">▼</div>
+        </div>
+        
+        <div id="fonctionsContent" style="display:none;margin-top:28px;padding-top:25px;border-top:2px solid rgba(59,130,246,0.15);">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 1</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 2</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 3</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 4</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 5</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 6</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 7</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 8</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 9</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 10</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 11</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 12</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 13</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 14</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 15</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 16</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 17</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 18</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 19</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 20</div>
+            </div>
+            <div style="margin-top:20px;padding:15px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;text-align:center;">
+                <span style="color:rgba(251,191,36,0.9);font-size:14px;">⚠️ الملفات ستضاف قريباً</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Immunologie -->
+    <div style="background:rgba(16,185,129,0.08);border:2px solid rgba(16,185,129,0.2);border-radius:18px;padding:30px;margin-bottom:25px;transition:0.3s;" onmouseover="this.style.borderColor='rgba(16,185,129,0.4)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.2)'">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleExerciseSection('immunologie')">
+            <div style="display:flex;align-items:center;gap:18px;">
+                <div style="width:65px;height:65px;background:linear-gradient(135deg,#10b981,#059669);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(16,185,129,0.3);">🛡️</div>
+                <div>
+                    <h3 style="font-size:26px;font-weight:800;margin:0 0 8px;color:white;">Immunologie</h3>
+                    <p style="font-size:15px;color:rgba(255,255,255,0.6);margin:0;">20 séries d'exercices • سيضاف قريباً</p>
+                </div>
+            </div>
+            <div id="immunologieArrow" style="font-size:28px;color:rgba(255,255,255,0.4);transition:transform 0.3s;">▼</div>
+        </div>
+        
+        <div id="immunologieContent" style="display:none;margin-top:28px;padding-top:25px;border-top:2px solid rgba(16,185,129,0.15);">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 1</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 2</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 3</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 4</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 5</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 6</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 7</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 8</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 9</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 10</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 11</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 12</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 13</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 14</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 15</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 16</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 17</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 18</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 19</div>
+                <div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;color:rgba(255,255,255,0.5);cursor:not-allowed;">📄 Série 20</div>
+            </div>
+            <div style="margin-top:20px;padding:15px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;text-align:center;">
+                <span style="color:rgba(251,191,36,0.9);font-size:14px;">⚠️ الملفات ستضاف قريباً</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Les examens régionaux -->
+    <div style="background:rgba(168,85,247,0.08);border:2px solid rgba(168,85,247,0.2);border-radius:18px;padding:30px;transition:0.3s;" onmouseover="this.style.borderColor='rgba(168,85,247,0.4)'" onmouseout="this.style.borderColor='rgba(168,85,247,0.2)'">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleExerciseSection('exams')">
+            <div style="display:flex;align-items:center;gap:18px;">
+                <div style="width:65px;height:65px;background:linear-gradient(135deg,#a855f7,#9333ea);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(168,85,247,0.3);">🎓</div>
+                <div>
+                    <h3 style="font-size:26px;font-weight:800;margin:0 0 8px;color:white;">Les examens régionaux</h3>
+                    <p style="font-size:15px;color:rgba(255,255,255,0.6);margin:0;">48 examens • 2023-2025 • سيضاف قريباً</p>
+                </div>
+            </div>
+            <div id="examsArrow" style="font-size:28px;color:rgba(255,255,255,0.4);transition:transform 0.3s;">▼</div>
+        </div>
+        
+        <div id="examsContent" style="display:none;margin-top:28px;padding-top:25px;border-top:2px solid rgba(168,85,247,0.15);">
+            
+            <!-- 2025 -->
+            <div style="margin-bottom:30px;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;" onclick="toggleYearSection('2025')">
+                    <h4 style="font-size:20px;font-weight:700;margin:0;color:rgba(168,85,247,0.9);">📅 2025</h4>
+                    <span style="font-size:13px;color:rgba(255,255,255,0.5);">(16 examens)</span>
+                    <div id="year2025Arrow" style="font-size:20px;color:rgba(255,255,255,0.4);transition:transform 0.3s;margin-left:auto;">▼</div>
+                </div>
+                <div id="year2025Content" style="display:none;padding-left:20px;">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Casablanca-Settat</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Rabat-Salé-Kénitra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Fès-Meknès</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Marrakech-Safi</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 L'Oriental</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Tanger-Tétouan-Al Hoceïma</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Drâa-Tafilalet</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Souss-Massa</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Guelmim-Oued Noun</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Laâyoune-Sakia El Hamra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Dakhla-Oued Ed-Dahab</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Béni Mellal-Khénifra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 العيون الساقية الحمراء</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 الداخلة وادي الذهب</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 جهة أخرى 1</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 جهة أخرى 2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2024 -->
+            <div style="margin-bottom:30px;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;" onclick="toggleYearSection('2024')">
+                    <h4 style="font-size:20px;font-weight:700;margin:0;color:rgba(168,85,247,0.9);">📅 2024</h4>
+                    <span style="font-size:13px;color:rgba(255,255,255,0.5);">(16 examens)</span>
+                    <div id="year2024Arrow" style="font-size:20px;color:rgba(255,255,255,0.4);transition:transform 0.3s;margin-left:auto;">▼</div>
+                </div>
+                <div id="year2024Content" style="display:none;padding-left:20px;">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Casablanca-Settat</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Rabat-Salé-Kénitra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Fès-Meknès</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Marrakech-Safi</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 L'Oriental</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Tanger-Tétouan-Al Hoceïma</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Drâa-Tafilalet</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Souss-Massa</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Guelmim-Oued Noun</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Laâyoune-Sakia El Hamra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Dakhla-Oued Ed-Dahab</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Béni Mellal-Khénifra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 العيون الساقية الحمراء</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 الداخلة وادي الذهب</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 جهة أخرى 1</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 جهة أخرى 2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2023 -->
+            <div>
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;" onclick="toggleYearSection('2023')">
+                    <h4 style="font-size:20px;font-weight:700;margin:0;color:rgba(168,85,247,0.9);">📅 2023</h4>
+                    <span style="font-size:13px;color:rgba(255,255,255,0.5);">(16 examens)</span>
+                    <div id="year2023Arrow" style="font-size:20px;color:rgba(255,255,255,0.4);transition:transform 0.3s;margin-left:auto;">▼</div>
+                </div>
+                <div id="year2023Content" style="display:none;padding-left:20px;">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Casablanca-Settat</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Rabat-Salé-Kénitra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Fès-Meknès</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Marrakech-Safi</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 L'Oriental</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Tanger-Tétouan-Al Hoceïma</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Drâa-Tafilalet</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Souss-Massa</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Guelmim-Oued Noun</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Laâyoune-Sakia El Hamra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Dakhla-Oued Ed-Dahab</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 Béni Mellal-Khénifra</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 العيون الساقية الحمراء</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 الداخلة وادي الذهب</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 جهة أخرى 1</div>
+                        <div style="padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);cursor:not-allowed;font-size:14px;">📄 جهة أخرى 2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top:25px;padding:15px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;text-align:center;">
+                <span style="color:rgba(251,191,36,0.9);font-size:14px;">⚠️ جميع الامتحانات الجهوية ستضاف قريباً</span>
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+<!-- Videos -->
+<section id="videos" class="page">
+    <h2 style="margin-bottom:25px;font-size:28px;">🎥 فيديوهات تعليمية</h2>
+    <div style="text-align:center;padding:80px 20px;">
+        <div style="font-size:80px;opacity:0.3;">🎥</div>
+        <h3 style="font-size:24px;margin:20px 0 10px;">محتوى قادم!</h3>
+        <p style="color:var(--gray);">سنضيف مكتبة من الفيديوهات قريباً</p>
+    </div>
+</section>
+
+<!-- Levels Selection -->
+<section id="levelsScreen" class="page">
+    <button class="back-btn" onclick="navigateTo('tests')">→ الرجوع</button>
+    <div style="text-align:center;margin-bottom:25px;">
+        <button class="btn btn-primary" onclick="showLeaderboard()" style="padding:12px 25px;">🏆 لائحة المتصدرين</button>
+    </div>
+    <h2 style="font-size:32px;font-weight:800;text-align:center;margin-bottom:30px;">اختر المستوى</h2>
+    <div class="levels-grid" id="levelsGrid"></div>
+</section>
+
+<!-- Game Screen -->
+<section id="gameScreen" class="page">
+    <div class="game-content">
+        <div class="question-card">
+            <div class="clue-box">
+                <div class="clue-label">💡 الدليل / L'indice</div>
+                <div class="clue-text" id="clueText"></div>
+            </div>
+            
+            <div class="answer-section">
+                <div class="answer-label">✏️ رتّب الحروف هنا</div>
+                <div class="answer-slots" id="answerSlots"></div>
+            </div>
+            
+            <div class="choices-section">
+                <div class="choices-label">🔡 الحروف المتاحة</div>
+                <div class="letter-choices" id="letterChoices"></div>
+            </div>
+            
+            <div class="game-actions">
+                <button class="btn btn-ghost" onclick="resetLetters()">↺ إعادة</button>
+                <button class="btn btn-warning" onclick="useHint()" id="hintBtn">💡 مساعدة (-5)</button>
+                <button class="btn btn-danger" onclick="skipQuestion()">⏭ تخطي (-10)</button>
+                <button class="btn btn-primary" onclick="checkAnswer()">✔ تحقق</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leaderboard -->
+<section id="leaderboardScreen" class="page">
+    <button class="back-btn" onclick="navigateTo('levelsScreen')">→ الرجوع</button>
+    <div class="leaderboard">
+        <h2 class="leaderboard-title">🏆 لائحة المتصدرين</h2>
+        <div class="leaderboard-table">
+            <div class="leaderboard-row header">
+                <div>الترتيب</div>
+                <div>الاسم</div>
+                <div>النقاط</div>
+                <div>الوقت</div>
+            </div>
+            <div id="leaderboardList"></div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- Feedback -->
+<div class="feedback-overlay" id="feedback"></div>
+
+<script>
+// === LESSONS DATA ===
+const lessonsData = {
+    nervous: {
+        title: '🧠 Le système nerveux',
+        paragraphs: [
+            { title: "L'organisation", image: 'nervous_1.jpg' },
+            { title: 'La sensibilité consciente', image: 'nervous_2.jpg' },
+            { title: 'La motricité volontaire', image: 'nervous_3.jpg' },
+            { title: 'Motricité involontaire', image: 'nervous_4.jpg' },
+            { title: 'Hygiène', image: 'nervous_5.jpg' }
+        ]
+    },
+    muscular: {
+        title: '💪 Le système musculaire',
+        paragraphs: [
+            { title: 'Rôle du muscle', image: 'muscular_1.jpg' },
+            { title: 'Structure', image: 'muscular_2.jpg' },
+            { title: 'Besoins', image: 'muscular_3.jpg' }
+        ]
+    },
+    immune: {
+        title: '🛡️ Le système immunitaire',
+        paragraphs: [
+            { title: 'Immunité naturelle', image: 'immune_1.jpg' },
+            { title: 'Immunité spécifique', image: 'immune_2.jpg' },
+            { title: 'Organes lymphoïdes', image: 'immune_3.jpg' },
+            { title: 'Renforcement', image: 'immune_4.jpg' }
+        ]
+    },
+    dysfunction: {
+        title: '🔴 Dysfonctionnements immunitaires',
+        paragraphs: [
+            { title: 'Allergies', image: 'dysfunction_1.jpg' },
+            { title: 'SIDA', image: 'dysfunction_2.jpg' }
+        ]
+    }
+};
+
+// === GAME DATA ===
+const levelsData = [
+    // Level 1
+    [
+        { answer: 'CERVEAU', clue: 'centre nerveux / مركز عصبي', extra: ['T','M','N','K','P','X','B','L','A','R','D','F','G'] },
+        { answer: 'MOELLE EPINIERE', clue: 'centre nerveux central / مركز عصبي مركزي', extra: ['X','T','K','A','B'] },
+        { answer: 'NERFS', clue: 'organe nerveux périphérique / عضو عصبي محيطي', extra: ['T','M','A','K','L','X','B','P','D','G','H','J','Q','W','Z'] },
+        { answer: 'CORPS CELLULAIRE', clue: 'situé dans la substance grise / يقع في المادة الرمادية', extra: ['X','T','K','M'] },
+        { answer: 'AXONE', clue: 'situé dans la substance blanche / يقع في المادة البيضاء', extra: ['R','T','M','L','P','K','B','D','F','G','H','J','Q','W','Z'] },
+        { answer: 'FIBRE NERVEUSE', clue: 'unité structurelle du nerf / وحدة بنيوية للعصب', extra: ['X','T','K','M','L','P'] },
+        { answer: 'NEURONE', clue: 'cellule nerveuse / الخلية العصبية', extra: ['B','M','T','X','K','A','L','P','D','F','G','H','J'] },
+        { answer: 'SYNAPSE', clue: 'zone entre deux neurones / منطقة بين عصبونين', extra: ['K','L','M','T','X','B','D','F','G','H','J','Q','W'] },
+        { answer: 'GANGLION SPINAL', clue: 'situé au niveau de la racine dorsale / يقع عند الجذر الظهري', extra: ['X','T','K','M','B'] },
+        { answer: 'NERF MIXTE', clue: 'transmet l\'influx nerveux sensitif et moteur / ينقل السيالة العصبية الحسية والحركية', extra: ['B','K','A','L','P','D','G','H','J','Q'] }
+    ],
+    // Levels 2-10 (temporary placeholder data)
+    ...Array(9).fill([
+        { answer: 'CERVEAU', clue: 'سؤال تجريبي - قريباً', extra: ['T','M','N','K','P','X','B','L','A','R','D','F','G'] },
+        { answer: 'NEURONE', clue: 'سؤال تجريبي - قريباً', extra: ['X','B','L','K','A','T','M','P','D','F','G','H','J'] },
+        { answer: 'REFLEXE', clue: 'سؤال تجريبي - قريباً', extra: ['M','T','A','P','W','K','B','D','F','G','H','J','Q'] },
+        { answer: 'MUSCLE', clue: 'سؤال تجريبي - قريباً', extra: ['T','B','N','D','P','X','A','K','F','G','H','J','Q','W'] },
+        { answer: 'VACCIN', clue: 'سؤال تجريبي - قريباً', extra: ['X','R','T','M','L','P','B','K','D','F','G','H','J','Q'] },
+        { answer: 'MICROBE', clue: 'سؤال تجريبي - قريباً', extra: ['K','A','T','S','X','P','D','F','G','H','J','Q','W','Z'] },
+        { answer: 'SANG', clue: 'سؤال تجريبي - قريباً', extra: ['B','P','T','M','R','K','L','X','D','F','G','H','J','Q','W','Z'] },
+        { answer: 'SYSTEME', clue: 'سؤال تجريبي - قريباً', extra: ['A','B','K','T','X','M','P','D','F','G','H','J','Q'] },
+        { answer: 'IMMUNE', clue: 'سؤال تجريبي - قريباً', extra: ['X','K','T','A','B','P','D','F','G','H','J','Q','W','Z'] },
+        { answer: 'ORGANE', clue: 'سؤال تجريبي - قريباً', extra: ['X','B','M','K','T','P','D','F','G','H','J','Q','W','Z'] }
+    ])
+];
+
+// Game State
+const gameState = {
+    playerName: 'Player',
+    currentLevel: 0,
+    currentQuestion: 0,
+    points: 0,
+    startTime: 0,
+    selectedLetters: [],
+    availableLetters: [],
+    isChecking: false,
+    hintedPositions: [],
+    currentAnswer: ''
+};
+
+// === STORAGE FUNCTIONS ===
+function loadProgress() {
+    const saved = localStorage.getItem('heptaGameProgress');
+    if (saved) return JSON.parse(saved);
+    return { unlockedLevels: 1, levelStars: {}, bestScores: {} };
+}
+
+function saveProgress(progress) {
+    localStorage.setItem('heptaGameProgress', JSON.stringify(progress));
+}
+
+function loadLeaderboard() {
+    const saved = localStorage.getItem('heptaLeaderboard');
+    if (saved) return JSON.parse(saved);
+    return [];
+}
+
+function saveLeaderboard(leaderboard) {
+    localStorage.setItem('heptaLeaderboard', JSON.stringify(leaderboard));
+}
+
+// === NAME INPUT ===
+function checkNameInput() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const btn = document.getElementById('startBtn');
+    const error = document.getElementById('nameError');
+    
+    if (firstName.length >= 2 && lastName.length >= 2) {
+        btn.disabled = false;
+        
+        // Check if name exists
+        const fullName = firstName + ' ' + lastName;
+        const leaderboard = loadLeaderboard();
+        const exists = leaderboard.some(entry => entry.name.toLowerCase() === fullName.toLowerCase());
+        
+        if (exists) {
+            error.style.display = 'block';
+        } else {
+            error.style.display = 'none';
+        }
+    } else {
+        btn.disabled = true;
+        error.style.display = 'none';
+    }
+}
+
+function submitName() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    
+    if (firstName.length < 2 || lastName.length < 2) {
+        alert('الرجاء إدخال الاسم والنسب (حرفين على الأقل لكل منهما)');
+        return;
+    }
+    
+    const fullName = firstName + ' ' + lastName;
+    
+    // Check if name exists
+    const leaderboard = loadLeaderboard();
+    const exists = leaderboard.some(entry => entry.name.toLowerCase() === fullName.toLowerCase());
+    
+    if (exists) {
+        alert('هذا الاسم مسجل بالفعل! الرجاء استخدام اسم آخر');
+        return;
+    }
+    
+    // Save name
+    gameState.playerName = fullName;
+    localStorage.setItem('heptaPlayerName', fullName);
+    
+    // Show name in navbar
+    document.getElementById('userNameText').textContent = fullName;
+    document.getElementById('userNameDisplay').style.display = 'block';
+    
+    // Update dashboard name
+    const dashboardNameEl = document.getElementById('dashboardName');
+    if (dashboardNameEl) dashboardNameEl.textContent = firstName;
+    
+    // Show welcome message
+    const overlay = document.getElementById('feedback');
+    overlay.innerHTML = `
+        <div class="feedback-card">
+            <div class="feedback-icon">🎉</div>
+            <div class="feedback-title success">مرحباً ${firstName}!</div>
+            <div class="feedback-msg">نتمنى لك تجربة تعليمية ممتعة 🌟</div>
+        </div>
+    `;
+    overlay.classList.add('active');
+    
+    setTimeout(() => {
+        overlay.classList.remove('active');
+        navigateTo('dashboard');
+        setTimeout(() => initCardRotation(), 200);
+    }, 2000);
+}
+
+// Check if user already logged in
+window.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('heptaPlayerName');
+    if (savedName) {
+        gameState.playerName = savedName;
+        document.getElementById('userNameText').textContent = savedName;
+        document.getElementById('userNameDisplay').style.display = 'block';
+        
+        // Update dashboard name
+        const firstName = savedName.split(' ')[0];
+        const dashboardNameEl = document.getElementById('dashboardName');
+        if (dashboardNameEl) dashboardNameEl.textContent = firstName;
+        
+        // Update game slide based on progress
+        const progress = loadProgress();
+        const gameSlideText = document.getElementById('gameSlideText');
+        const gameSlideStatus = document.getElementById('gameSlideStatus');
+        
+        if (gameSlideText && gameSlideStatus) {
+            const highestLevel = progress.unlockedLevels || 1;
+            const totalStars = Object.values(progress.levelStars || {}).reduce((a, b) => a + b, 0);
+            
+            if (highestLevel > 1 || totalStars > 0) {
+                gameSlideText.innerHTML = `🔥 حسّن نتيجتك!<br>المستوى: ${highestLevel} | ⭐ ${totalStars}`;
+                gameSlideStatus.textContent = 'واصل اللعب';
+            } else {
+                gameSlideText.innerHTML = `🎮 ابدأ التحدي!<br>لم تجرب اللعبة بعد؟`;
+                gameSlideStatus.textContent = 'ابدأ الآن';
+            }
+        }
+        
+        navigateTo('dashboard');
+        setTimeout(() => initCardRotation(), 200);
+    }
+});
+
+// === DASHBOARD CAROUSEL ROTATION ===
+let currentCardIndex = 0;
+let cardRotationTimer;
+
+function showCard(index) {
+    const cards = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    
+    if (!cards.length) return;
+    
+    cards.forEach((card, i) => {
+        if (i === index) {
+            card.style.opacity = '1';
+            card.style.zIndex = '2';
+            card.style.visibility = 'visible';
+        } else {
+            card.style.opacity = '0';
+            card.style.zIndex = '1';
+            card.style.visibility = 'hidden';
+        }
+    });
+    
+    dots.forEach((dot, i) => {
+        if (i === index) {
+            dot.style.background = 'var(--primary)';
+            dot.style.transform = 'scale(1.3)';
+        } else {
+            dot.style.background = 'rgba(255,255,255,0.3)';
+            dot.style.transform = 'scale(1)';
+        }
+    });
+}
+
+function nextCard() {
+    currentCardIndex = (currentCardIndex + 1) % 5;
+    showCard(currentCardIndex);
+}
+
+function goToCard(index) {
+    currentCardIndex = index;
+    showCard(currentCardIndex);
+    resetCardTimer();
+}
+
+function startCardRotation() {
+    cardRotationTimer = setInterval(() => {
+        nextCard();
+    }, 3000);
+}
+
+function stopCardRotation() {
+    if (cardRotationTimer) {
+        clearInterval(cardRotationTimer);
+        cardRotationTimer = null;
+    }
+}
+
+function resetCardTimer() {
+    stopCardRotation();
+    startCardRotation();
+}
+
+function initCardRotation() {
+    const dashboard = document.getElementById('dashboard');
+    if (dashboard && dashboard.classList.contains('active')) {
+        showCard(0);
+        startCardRotation();
+    }
+}
+
+// === NAVIGATION ===
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('active');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+}
+
+function navigateTo(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(page).classList.add('active');
+    document.getElementById('gameHud').classList.remove('active');
+    
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+    closeSidebar();
+    window.scrollTo(0, 0);
+    
+    if (page === 'levelsScreen') {
+        renderLevels();
+    }
+    
+    // Control carousel
+    if (page === 'dashboard') {
+        setTimeout(() => initCardRotation(), 100);
+    } else {
+        stopCardRotation();
+    }
+}
+
+// === LESSONS ===
+function openLesson(key) {
+    const lesson = lessonsData[key];
+    document.getElementById('lessonTitle').textContent = lesson.title;
+    const container = document.getElementById('lessonParagraphs');
+    container.innerHTML = '';
+    lesson.paragraphs.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => showImage(p.image, p.title);
+        card.innerHTML = `
+            <div class="card-icon">📄</div>
+            <h4 class="card-title">${p.title}</h4>
+        `;
+        container.appendChild(card);
+    });
+    navigateTo('lessonDetails');
+}
+
+function showImage(path) {
+    const popup = document.createElement('div');
+    popup.className = 'popup active';
+    popup.innerHTML = `
+        <div class="popup-content">
+            <button class="popup-close" onclick="this.parentElement.parentElement.remove()">✖</button>
+            <img class="popup-img" src="${path}" onerror="alert('خطأ في تحميل الصورة')">
+        </div>
+    `;
+    document.body.appendChild(popup);
+}
+
+// === EXERCISES TOGGLE SYSTEM ===
+function toggleExerciseSection(section) {
+    const content = document.getElementById(section + 'Content');
+    const arrow = document.getElementById(section + 'Arrow');
+    
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+function toggleYearSection(year) {
+    const content = document.getElementById('year' + year + 'Content');
+    const arrow = document.getElementById('year' + year + 'Arrow');
+    
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+// === SIMPLE QUIZ SYSTEM ===
+const quizData = {
+    easy: [
+        {"question":"Quel organe fait partie du système nerveux central ?","options":["L'encéphale","Le muscle","L'os"],"answer":"L'encéphale"},
+        {"question":"Quel est le rôle des récepteurs sensoriels dans la peau ?","options":["Produire le mouvement","Capter les stimulus extérieurs","Analyser les messages"],"answer":"Capter les stimulus extérieurs"},
+        {"question":"Où naît l'influx nerveux moteur lors d'un mouvement volontaire ?","options":["Dans l'aire motrice","Dans la moelle épinière","Dans l'œil"],"answer":"Dans l'aire motrice"},
+        {"question":"Le nerf sciatique est un conducteur :","options":["Uniquement sensitif","Uniquement moteur","Mixte"],"answer":"Mixte"},
+        {"question":"Quel est le centre nerveux responsable des réflexes médullaires ?","options":["Le cerveau","La moelle épinière","Le cervelet"],"answer":"La moelle épinière"},
+        {"question":"Comment appelle-t-on l'unité structurelle du système nerveux ?","options":["La fibre musculaire","Le neurone","Le tendon"],"answer":"Le neurone"},
+        {"question":"Quelle est la propriété du muscle qui lui permet de se raccourcir ?","options":["L'élasticité","L'excitabilité","La contractilité"],"answer":"La contractilité"},
+        {"question":"Le muscle squelettique est relié à l'os par :","options":["Les tendons","Les nerfs","Les vaisseaux"],"answer":"Les tendons"},
+        {"question":"Quels sont les besoins de la contraction musculaire ?","options":["Glucose et Oxygène","CO2 et Eau","Graisse et Azote"],"answer":"Glucose et Oxygène"},
+        {"question":"La zone de contact entre neurone et muscle est :","options":["L'aire de Broca","La plaque motrice","Le corps cellulaire"],"answer":"La plaque motrice"},
+        {"question":"L'arc réflexe concerne quel type de mouvement ?","options":["Volontaire","Involontaire","Le sommeil"],"answer":"Involontaire"},
+        {"question":"Quelle substance nuit gravement aux réflexes ?","options":["L'eau","Les vitamines","L'alcool"],"answer":"L'alcool"},
+        {"question":"L'aire visuelle sert à :","options":["Entendre","Voir","Goûter"],"answer":"Voir"},
+        {"question":"Une fibre musculaire est une :","options":["Cellule","Bactérie","Protéine"],"answer":"Cellule"},
+        {"question":"L'influx nerveux sensitif se dirige vers :","options":["Les muscles","Les centres nerveux","La peau"],"answer":"Les centres nerveux"},
+        {"question":"L'organe qui exécute le mouvement est :","options":["Le nerf","Le muscle","L'œil"],"answer":"Le muscle"},
+        {"question":"La matière grise du cerveau est située en :","options":["Périphérie","Centre","Bas"],"answer":"Périphérie"},
+        {"question":"Le stimulus de l'oreille est :","options":["La lumière","Le son","L'odeur"],"answer":"Le son"},
+        {"question":"Le manque de sommeil fatigue quel système ?","options":["Nerveux","Digestif","Urinaire"],"answer":"Nerveux"},
+        {"question":"Le cerveau est protégé par :","options":["Le crâne","La peau uniquement","Les muscles"],"answer":"Le crâne"}
+    ],
+    medium: [
+        {"type":"QCM","question":"Le trajet de l'influx nerveux lors d'un réflexe médullaire est :","options":["Récepteur -> Moelle épinière -> Muscle","Récepteur -> Cerveau -> Muscle","Cerveau -> Moelle épinière -> Muscle"],"answer":"Récepteur -> Moelle épinière -> Muscle"},
+        {"type":"QCM","question":"L'influx nerveux sensitif est qualifié de :","options":["Centrifuge (vers la périphérie)","Centripète (vers le centre)","Fixe"],"answer":"Centripète (vers le centre)"},
+        {"type":"QCM","question":"La substance grise de la moelle épinière se trouve :","options":["En périphérie","Au centre (forme de H)","Partout"],"answer":"Au centre (forme de H)"},
+        {"type":"QCM","question":"Les nerfs rachidiens sont fixés à la moelle épinière par :","options":["Une seule racine","Deux racines (antérieure et postérieure)","Trois racines"],"answer":"Deux racines (antérieure et postérieure)"},
+        {"type":"QCM","question":"La racine postérieure du nerf rachidien contient :","options":["Uniquement des fibres motrices","Uniquement des fibres sensitives","Des fibres mixtes"],"answer":"Uniquement des fibres sensitives"},
+        {"type":"QCM","question":"L'excitabilité d'un muscle est sa capacité à :","options":["Reprendre sa forme initiale","Réagir à un stimulus","Se contracter fortement"],"answer":"Réagir à un stimulus"},
+        {"type":"QCM","question":"Lorsqu'on excite la racine antérieure d'un nerf rachidien, on observe :","options":["Une douleur","Une paralysie","Une contraction musculaire"],"answer":"Une contraction musculaire"},
+        {"type":"QCM","question":"Qu'est-ce qu'une synapse ?","options":["Une cellule nerveuse","Une zone de contact entre deux neurones","Un muscle"],"answer":"Une zone de contact entre deux neurones"},
+        {"type":"QCM","question":"Le message nerveux est de nature :","options":["Chimique uniquement","Électrique","Mécanique"],"answer":"Électrique"},
+        {"type":"QCM","question":"L'élasticité musculaire est :","options":["Illimitée","Limitée","Absente chez l'homme"],"answer":"Limitée"},
+        {"type":"QCM","question":"L'aire motrice se situe :","options":["En arrière du sillon de Rolando","En avant du sillon de Rolando","Dans le cervelet"],"answer":"En avant du sillon de Rolando"},
+        {"type":"QCM","question":"Les muscles antagonistes sont des muscles qui :","options":["Agissent dans le même sens","Agissent en sens opposés","Ne travaillent jamais"],"answer":"Agissent en sens opposés"},
+        {"type":"QCM","question":"Le corps cellulaire d'un neurone moteur se trouve dans :","options":["Le muscle","La substance grise","La substance blanche"],"answer":"La substance grise"},
+        {"type":"QCM","question":"La plaque motrice libère une substance appelée :","options":["Hormone","Neurotransmetteur","Sang"],"answer":"Neurotransmetteur"},
+        {"type":"QCM","question":"Le réflexe permet de :","options":["Réfléchir à une situation","Protéger l'organisme","Apprendre à lire"],"answer":"Protéger l'organisme"},
+        {"type":"QCM","question":"Le neurone est composé d'un corps cellulaire, d'un axone et de dendrites.","options":["Vrai","Faux"],"answer":"Vrai"},
+        {"type":"QCM","question":"Les tendons sont extensibles comme les muscles.","options":["Vrai","Faux"],"answer":"Faux"},
+        {"type":"QCM","question":"La matière blanche contient les corps cellulaires des neurones.","options":["Vrai","Faux"],"answer":"Faux"},
+        {"type":"QCM","question":"Le muscle transforme l'énergie chimique en énergie mécanique.","options":["Vrai","Faux"],"answer":"Vrai"},
+        {"type":"QCM","question":"L'arc réflexe nécessite l'intervention de l'aire motrice.","options":["Vrai","Faux"],"answer":"Faux"},
+        {"type":"Matching","question":"Relier les organes à leurs rôles","left":["Moelle épinière","Aire visuelle","Nerf moteur"],"right":["Analyse de l'influx sensitif","Conducteur centrifuge","Centre du réflexe"],"pairs":{"Moelle épinière":"Centre du réflexe","Aire visuelle":"Analyse de l'influx sensitif","Nerf moteur":"Conducteur centrifuge"}},
+        {"type":"Matching","question":"Relier les concepts aux définitions","left":["Neurone","Fibre musculaire","Synapse"],"right":["Cellule musculaire","Zone de communication","Cellule nerveuse"],"pairs":{"Neurone":"Cellule nerveuse","Fibre musculaire":"Cellule musculaire","Synapse":"Zone de communication"}},
+        {"type":"Matching","question":"Relier les propriétés musculaires","left":["Se contracter","Réagir à un stimulus","Reprendre sa forme"],"right":["Excitabilité","Élasticité","Contractilité"],"pairs":{"Se contracter":"Contractilité","Réagir à un stimulus":"Excitabilité","Reprendre sa forme":"Élasticité"}},
+        {"type":"Matching","question":"Relier les composants du système","left":["Encéphale","Système périphérique","Système central"],"right":["Encéphale + Moelle épinière","Cerveau + Cervelet + Bulbe","Les nerfs"],"pairs":{"Encéphale":"Cerveau + Cervelet + Bulbe","Système périphérique":"Les nerfs","Système central":"Encéphale + Moelle épinière"}},
+        {"type":"Matching","question":"Relier les activités aux types de réponses","left":["Brûlure soudaine","Écrire un message","Entendre de la musique"],"right":["Sensibilité consciente","Réflexe","Motricité volontaire"],"pairs":{"Brûlure soudaine":"Réflexe","Écrire un message":"Motricité volontaire","Entendre de la musique":"Sensibilité consciente"}}
+    ],
+    hard: [
+        {"type":"QCM","question":"Une section de la racine antérieure d'un nerf rachidien entraîne :","options":["Perte de sensibilité uniquement","Paralysie musculaire uniquement","Perte de sensibilité et de motricité"],"answer":"Paralysie musculaire uniquement"},
+        {"type":"QCM","question":"L'aire motrice gauche contrôle :","options":["La partie droite du corps","La partie gauche du corps","Tout le corps"],"answer":"La partie droite du corps"},
+        {"type":"QCM","question":"Le centre nerveux de la motricité volontaire est :","options":["La moelle épinière","L'écorce cérébrale","Le muscle"],"answer":"L'écorce cérébrale"},
+        {"type":"QCM","question":"Lors de la flexion du bras :","options":["Biceps contracté, Triceps relâché","Biceps relâché, Triceps contracté","Les deux sont contractés"],"answer":"Biceps contracté, Triceps relâché"},
+        {"type":"QCM","question":"Quelle structure contient le neurotransmetteur avant sa libération ?","options":["Le noyau","Les vésicules synaptiques","Les dendrites"],"answer":"Les vésicules synaptiques"},
+        {"type":"QCM","question":"Le stimulus spécifique des photorécepteurs est :","options":["Le son","La lumière","La pression"],"answer":"La lumière"},
+        {"type":"QCM","question":"La gaine de myéline sert à :","options":["Ralentir l'influx","Accélérer l'influx","Nourrir le muscle"],"answer":"Accélérer l'influx"},
+        {"type":"QCM","question":"L'accumulation de quelle substance cause la fatigue musculaire ?","options":["Oxygène","Acide lactique","Glucose"],"answer":"Acide lactique"},
+        {"type":"QCM","question":"La synapse neuromusculaire est aussi appelée :","options":["Plaque motrice","Ganglion spinal","Corps cellulaire"],"answer":"Plaque motrice"},
+        {"type":"QCM","question":"Que signifie un nerf 'mixte' ?","options":["Sensitif et moteur","Cerveau et moelle","Muscle et os"],"answer":"Sensitif et moteur"},
+        {"type":"TrueFalse","question":"La substance blanche de la moelle épinière est située à l'extérieur de la substance grise.","answer":true},
+        {"type":"TrueFalse","question":"Le curare est une substance qui stimule la contraction musculaire.","answer":false},
+        {"type":"TrueFalse","question":"Le neurone est l'unité structurelle et fonctionnelle du système nerveux.","answer":true},
+        {"type":"TrueFalse","question":"L'influx nerveux moteur circule du centre vers les organes effecteurs.","answer":true},
+        {"type":"TrueFalse","question":"Une fatigue musculaire prolongée peut mener à une déchirure.","answer":true},
+        {"type":"TrueFalse","question":"L'influx nerveux est de nature électrique le long de l'axone.","answer":true},
+        {"type":"TrueFalse","question":"Le réflexe médullaire nécessite l'intervention du cerveau.","answer":false},
+        {"type":"TrueFalse","question":"Les tendons fixent le muscle sur l'os.","answer":true},
+        {"type":"TrueFalse","question":"Le système nerveux central est protégé par le squelette.","answer":true},
+        {"type":"TrueFalse","question":"La matière grise contient les axones myélinisés.","answer":false},
+        {"type":"Ordering","question":"Ordonnez le trajet de l'influx nerveux dans une sensibilité consciente (vue) :","steps":["Stimulus (Lumière)","Récepteur (Rétine)","Conducteur (Nerf optique)","Centre (Aire visuelle)"]},
+        {"type":"Ordering","question":"Ordonnez les étapes de la synapse :","steps":["Arrivée de l'influx","Libération du neurotransmetteur","Fixation sur les récepteurs","Naissance d'un nouvel influx"]},
+        {"type":"Ordering","question":"Ordonnez les couches protectrices du cerveau (de l'extérieur vers l'intérieur) :","steps":["Crâne","Dure-mère","Arachnoïde","Pie-mère"]},
+        {"type":"Ordering","question":"Ordonnez les structures musculaires de la plus grande à la plus petite :","steps":["Muscle","Faisceau de fibres","Fibre musculaire","Myofibrille"]},
+        {"type":"Ordering","question":"Ordonnez les composants de l'encéphale du haut vers le bas :","steps":["Cerveau","Cervelet","Bulbe rachidien"]},
+        {"type":"Labeling","question":"Nommez les 5 éléments de l'arc réflexe :","keywords":["récepteur","sensitif","centre","moelle","moteur","effecteur","muscle"],"elements":["Récepteur","Conducteur sensitif","Centre (moelle)","Conducteur moteur","Effecteur"]},
+        {"type":"Labeling","question":"Nommez les 3 parties principales du neurone :","keywords":["corps","cellulaire","axone","arborisation","terminale","dendrite"],"elements":["Corps cellulaire","Axone","Arborisation terminale"]},
+        {"type":"Labeling","question":"Identifiez les 3 types de muscles dans le corps :","keywords":["squelettique","lisse","cardiaque","strié"],"elements":["Squelettique","Lisse","Cardiaque"]},
+        {"type":"Labeling","question":"Nommez les 2 racines du nerf rachidien :","keywords":["antérieure","postérieure","motrice","sensitive","racine"],"elements":["Racine antérieure (motrice)","Racine postérieure (sensitive)"]},
+        {"type":"Labeling","question":"Nommez 2 nutriments essentiels pour le muscle :","keywords":["glucose","oxygène","dioxygène","o2","énergie"],"elements":["Glucose","Dioxygène (O2)"]},
+        {"type":"Mention","question":"Citez 3 constituants de l'encéphale :","keywords":["cerveau","cervelet","bulbe","tronc","cérébral"],"requiredCount":3},
+        {"type":"Mention","question":"Citez 3 propriétés du muscle squelettique :","keywords":["excitabilité","contractilité","élasticité","extensibilité"],"requiredCount":3},
+        {"type":"Mention","question":"Citez 2 substances chimiques qui perturbent la transmission nerveuse :","keywords":["alcool","drogue","nicotine","tabac","cannabis","stupéfiant"],"requiredCount":2},
+        {"type":"Mention","question":"Citez 3 types de récepteurs sensoriels cutanés :","keywords":["thermorécepteur","mécanorécepteur","nocicepteur","douleur","chaleur","pression","toucher"],"requiredCount":3},
+        {"type":"Mention","question":"Citez 2 fonctions de la moelle épinière :","keywords":["réflexe","centre","conducteur","message","transmission","influx"],"requiredCount":2},
+        {"type":"DirectQuestion","question":"Expliquez le rôle des muscles antagonistes lors d'un mouvement.","keywords":["opposition","contracte","étire","agoniste","antagoniste","mouvement","articulation"],"requiredKeywords":3},
+        {"type":"DirectQuestion","question":"Pourquoi une lésion de la moelle épinière peut-elle entraîner une paralysie des membres ?","keywords":["interrompt","transmission","influx","moteur","cerveau","muscle","lésion"],"requiredKeywords":3},
+        {"type":"DirectQuestion","question":"Définissez la plaque motrice.","keywords":["synapse","jonction","neurone","moteur","fibre","musculaire","contact"],"requiredKeywords":3},
+        {"type":"DirectQuestion","question":"Quel est l'effet de la consommation de drogues sur le temps de réaction ?","keywords":["augmente","ralentit","temps","réaction","perturbation","synapse","transmission"],"requiredKeywords":3},
+        {"type":"DirectQuestion","question":"Comment le muscle produit-il l'énergie nécessaire à sa contraction ?","keywords":["oxydation","glucose","oxygène","énergie","chaleur","réaction","chimique"],"requiredKeywords":3}
+    ]
+};
+
+let currentQuizLevel = 'easy';
+let quizQuestions = [];
+let quizIndex = 0, quizCorrect = 0, quizWrong = 0, quizAnswered = false;
+let matchingConnections = {};
+
+function startKnowledgeQuiz(level) {
+    currentQuizLevel = level;
+    
+    if (level === 'easy') {
+        quizQuestions = quizData.easy;
+    } else if (level === 'medium') {
+        quizQuestions = quizData.medium;
+    } else if (level === 'hard') {
+        quizQuestions = quizData.hard;
+    } else {
+        alert('هذا المستوى غير موجود!');
+        return;
+    }
+    
+    quizIndex = 0;
+    quizCorrect = 0;
+    quizWrong = 0;
+    matchingConnections = {};
+    navigateTo('quizScreen');
+    loadQuizQuestion();
+}
+
+function loadQuizQuestion() {
+    const q = quizQuestions[quizIndex];
+    const totalQuestions = quizQuestions.length;
+    quizAnswered = false;
+    
+    document.getElementById('quizProgress').textContent = `${quizIndex + 1}/${totalQuestions}`;
+    document.getElementById('quizCorrect').textContent = quizCorrect;
+    document.getElementById('quizWrong').textContent = quizWrong;
+    document.getElementById('quizQuestion').textContent = q.question;
+    
+    const container = document.getElementById('quizOptions');
+    container.innerHTML = '';
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '15px';
+    
+    // Type: QCM or default
+    if (!q.type || q.type === 'QCM') {
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.textContent = opt;
+            btn.onclick = () => checkQuizAnswer(opt, q.answer, btn);
+            btn.style.cssText = 'width:100%;padding:18px 25px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:white;font-size:16px;font-weight:600;cursor:pointer;transition:0.3s;text-align:right;font-family:Cairo,sans-serif;';
+            btn.onmouseover = () => { if (!quizAnswered) { btn.style.background = 'rgba(99,102,241,0.2)'; btn.style.borderColor = 'var(--primary)'; }};
+            btn.onmouseout = () => { if (!quizAnswered) { btn.style.background = 'rgba(255,255,255,0.05)'; btn.style.borderColor = 'rgba(255,255,255,0.1)'; }};
+            container.appendChild(btn);
+        });
+    }
+    // Type: Matching
+    else if (q.type === 'Matching') {
+        matchingConnections = {};
+        container.style.display = 'grid';
+        container.style.gridTemplateColumns = '1fr 1fr';
+        container.style.gap = '30px';
+        
+        const leftCol = document.createElement('div');
+        leftCol.style.cssText = 'display:flex;flex-direction:column;gap:12px;';
+        
+        const rightCol = document.createElement('div');
+        rightCol.style.cssText = 'display:flex;flex-direction:column;gap:12px;';
+        
+        // Shuffle right column
+        const shuffledRight = [...q.right].sort(() => Math.random() - 0.5);
+        
+        q.left.forEach((item, i) => {
+            const leftItem = document.createElement('div');
+            leftItem.textContent = item;
+            leftItem.dataset.left = item;
+            leftItem.style.cssText = 'padding:16px 20px;background:rgba(59,130,246,0.15);border:2px solid rgba(59,130,246,0.3);border-radius:10px;color:white;font-size:15px;font-weight:600;cursor:pointer;transition:0.3s;position:relative;';
+            leftItem.onmouseover = () => leftItem.style.background = 'rgba(59,130,246,0.25)';
+            leftItem.onmouseout = () => leftItem.style.background = 'rgba(59,130,246,0.15)';
+            leftItem.onclick = () => selectMatchingItem(leftItem, 'left');
+            leftCol.appendChild(leftItem);
+        });
+        
+        shuffledRight.forEach((item, i) => {
+            const rightItem = document.createElement('div');
+            rightItem.textContent = item;
+            rightItem.dataset.right = item;
+            rightItem.style.cssText = 'padding:16px 20px;background:rgba(16,185,129,0.15);border:2px solid rgba(16,185,129,0.3);border-radius:10px;color:white;font-size:15px;font-weight:600;cursor:pointer;transition:0.3s;';
+            rightItem.onmouseover = () => rightItem.style.background = 'rgba(16,185,129,0.25)';
+            rightItem.onmouseout = () => rightItem.style.background = 'rgba(16,185,129,0.15)';
+            rightItem.onclick = () => selectMatchingItem(rightItem, 'right');
+            rightCol.appendChild(rightItem);
+        });
+        
+        container.appendChild(leftCol);
+        container.appendChild(rightCol);
+        
+        // Add submit button for matching
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'تأكيد الإجابة';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.style.cssText = 'grid-column:1/-1;margin-top:20px;padding:16px;font-size:17px;';
+        submitBtn.onclick = () => checkMatchingAnswer(q.pairs);
+        container.appendChild(submitBtn);
+    }
+    // Type: TrueFalse
+    else if (q.type === 'TrueFalse') {
+        ['Vrai', 'Faux'].forEach(opt => {
+            const btn = document.createElement('button');
+            btn.textContent = opt;
+            const answerValue = (opt === 'Vrai') ? true : false;
+            btn.onclick = () => checkQuizAnswer(answerValue, q.answer, btn, opt);
+            btn.style.cssText = 'width:100%;padding:18px 25px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:white;font-size:16px;font-weight:600;cursor:pointer;transition:0.3s;text-align:center;font-family:Cairo,sans-serif;';
+            btn.onmouseover = () => { if (!quizAnswered) { btn.style.background = 'rgba(99,102,241,0.2)'; btn.style.borderColor = 'var(--primary)'; }};
+            btn.onmouseout = () => { if (!quizAnswered) { btn.style.background = 'rgba(255,255,255,0.05)'; btn.style.borderColor = 'rgba(255,255,255,0.1)'; }};
+            container.appendChild(btn);
+        });
+    }
+    // Type: Ordering
+    else if (q.type === 'Ordering') {
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.gap = '12px';
+        
+        const shuffledSteps = [...q.steps].sort(() => Math.random() - 0.5);
+        const userOrder = [];
+        
+        shuffledSteps.forEach((step, index) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.style.cssText = 'display:flex;align-items:center;gap:15px;padding:15px 20px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;';
+            
+            const numberInput = document.createElement('input');
+            numberInput.type = 'number';
+            numberInput.min = '1';
+            numberInput.max = q.steps.length;
+            numberInput.placeholder = '#';
+            numberInput.dataset.step = step;
+            numberInput.style.cssText = 'width:50px;padding:8px;background:rgba(99,102,241,0.2);border:2px solid var(--primary);border-radius:8px;color:white;text-align:center;font-size:18px;font-weight:700;';
+            
+            const stepText = document.createElement('span');
+            stepText.textContent = step;
+            stepText.style.cssText = 'flex:1;color:white;font-size:16px;';
+            
+            stepDiv.appendChild(numberInput);
+            stepDiv.appendChild(stepText);
+            container.appendChild(stepDiv);
+        });
+        
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'تأكيد الترتيب';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.style.cssText = 'margin-top:20px;padding:16px;font-size:17px;';
+        submitBtn.onclick = () => checkOrderingAnswer(q.steps);
+        container.appendChild(submitBtn);
+    }
+    // Type: Labeling
+    else if (q.type === 'Labeling') {
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.gap = '15px';
+        
+        q.elements.forEach((element, index) => {
+            const labelDiv = document.createElement('div');
+            labelDiv.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+            
+            const label = document.createElement('label');
+            label.textContent = `${index + 1}. Élément ${index + 1} :`;
+            label.style.cssText = 'color:rgba(255,255,255,0.7);font-size:14px;';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'Votre réponse...';
+            input.dataset.index = index;
+            input.style.cssText = 'padding:12px 18px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:10px;color:white;font-size:16px;font-family:Cairo,sans-serif;';
+            
+            labelDiv.appendChild(label);
+            labelDiv.appendChild(input);
+            container.appendChild(labelDiv);
+        });
+        
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'تأكيد الإجابات';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.style.cssText = 'margin-top:20px;padding:16px;font-size:17px;';
+        submitBtn.onclick = () => checkLabelingAnswer(q.elements, q.keywords);
+        container.appendChild(submitBtn);
+    }
+    // Type: Mention
+    else if (q.type === 'Mention') {
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.gap = '15px';
+        
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = 'اكتب إجابتك هنا... (افصل بين العناصر بفاصلة)';
+        textarea.rows = 4;
+        textarea.style.cssText = 'padding:15px 20px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:white;font-size:16px;font-family:Cairo,sans-serif;resize:vertical;';
+        container.appendChild(textarea);
+        
+        const hint = document.createElement('div');
+        hint.textContent = `💡 Conseil : Écrivez ${q.requiredCount} éléments séparés par des virgules`;
+        hint.style.cssText = 'color:rgba(255,255,255,0.5);font-size:13px;font-style:italic;';
+        container.appendChild(hint);
+        
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'تأكيد الإجابة';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.style.cssText = 'margin-top:15px;padding:16px;font-size:17px;';
+        submitBtn.onclick = () => checkMentionAnswer(textarea.value, q.keywords, q.requiredCount);
+        container.appendChild(submitBtn);
+    }
+    // Type: DirectQuestion
+    else if (q.type === 'DirectQuestion') {
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.gap = '15px';
+        
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = 'اكتب إجابتك هنا...';
+        textarea.rows = 6;
+        textarea.style.cssText = 'padding:15px 20px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:white;font-size:16px;font-family:Cairo,sans-serif;resize:vertical;line-height:1.6;';
+        container.appendChild(textarea);
+        
+        const hint = document.createElement('div');
+        hint.textContent = '💡 Conseil : Répondez de manière complète en utilisant les termes appropriés';
+        hint.style.cssText = 'color:rgba(255,255,255,0.5);font-size:13px;font-style:italic;';
+        container.appendChild(hint);
+        
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'تأكيد الإجابة';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.style.cssText = 'margin-top:15px;padding:16px;font-size:17px;';
+        submitBtn.onclick = () => checkDirectQuestionAnswer(textarea.value, q.keywords, q.requiredKeywords);
+        container.appendChild(submitBtn);
+    }
+    
+    document.getElementById('quizFeedback').style.display = 'none';
+    document.getElementById('quizNextBtn').style.display = 'none';
+}
+
+let selectedMatchingLeft = null;
+let selectedMatchingRight = null;
+
+function selectMatchingItem(element, side) {
+    if (quizAnswered) return;
+    
+    if (side === 'left') {
+        if (selectedMatchingLeft) {
+            selectedMatchingLeft.style.borderColor = 'rgba(59,130,246,0.3)';
+            selectedMatchingLeft.style.transform = 'scale(1)';
+        }
+        selectedMatchingLeft = element;
+        element.style.borderColor = 'rgba(59,130,246,1)';
+        element.style.transform = 'scale(1.05)';
+        
+        if (selectedMatchingRight) {
+            createMatchingConnection();
+        }
+    } else {
+        if (selectedMatchingRight) {
+            selectedMatchingRight.style.borderColor = 'rgba(16,185,129,0.3)';
+            selectedMatchingRight.style.transform = 'scale(1)';
+        }
+        selectedMatchingRight = element;
+        element.style.borderColor = 'rgba(16,185,129,1)';
+        element.style.transform = 'scale(1.05)';
+        
+        if (selectedMatchingLeft) {
+            createMatchingConnection();
+        }
+    }
+}
+
+function createMatchingConnection() {
+    const leftKey = selectedMatchingLeft.dataset.left;
+    const rightValue = selectedMatchingRight.dataset.right;
+    
+    matchingConnections[leftKey] = rightValue;
+    
+    // Visual feedback
+    selectedMatchingLeft.innerHTML = `${selectedMatchingLeft.textContent} ➡️`;
+    selectedMatchingRight.style.opacity = '0.6';
+    
+    // Reset selection
+    selectedMatchingLeft.style.borderColor = 'rgba(59,130,246,0.3)';
+    selectedMatchingLeft.style.transform = 'scale(1)';
+    selectedMatchingRight.style.borderColor = 'rgba(16,185,129,0.3)';
+    selectedMatchingRight.style.transform = 'scale(1)';
+    selectedMatchingLeft = null;
+    selectedMatchingRight = null;
+}
+
+function checkMatchingAnswer(correctPairs) {
+    quizAnswered = true;
+    
+    let allCorrect = true;
+    for (const [left, correctRight] of Object.entries(correctPairs)) {
+        if (matchingConnections[left] !== correctRight) {
+            allCorrect = false;
+            break;
+        }
+    }
+    
+    const container = document.getElementById('quizOptions');
+    const leftItems = container.querySelectorAll('[data-left]');
+    
+    leftItems.forEach(item => {
+        const leftKey = item.dataset.left;
+        const userAnswer = matchingConnections[leftKey];
+        const correctAnswer = correctPairs[leftKey];
+        
+        if (userAnswer === correctAnswer) {
+            item.style.background = 'rgba(16,185,129,0.2)';
+            item.style.borderColor = 'var(--success)';
+            item.innerHTML = `✅ ${leftKey} ➡️ ${correctAnswer}`;
+        } else {
+            item.style.background = 'rgba(239,68,68,0.2)';
+            item.style.borderColor = 'var(--danger)';
+            item.innerHTML = `❌ ${leftKey}<br><small style="font-size:12px;opacity:0.8;">الصواب: ${correctAnswer}</small>`;
+        }
+    });
+    
+    if (allCorrect) {
+        quizCorrect++;
+        document.getElementById('quizCorrect').textContent = quizCorrect;
+        showFeedback(true, 'جميع الروابط صحيحة!');
+    } else {
+        quizWrong++;
+        document.getElementById('quizWrong').textContent = quizWrong;
+        showFeedback(false, 'بعض الروابط خاطئة. راجع الإجابات الصحيحة.');
+    }
+    
+    document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function checkQuizAnswer(selected, correct, btn) {
+    if (quizAnswered) return;
+    quizAnswered = true;
+    
+    const isCorrect = selected === correct;
+    
+    document.querySelectorAll('#quizOptions button').forEach(opt => {
+        opt.style.cursor = 'not-allowed';
+        if (opt.textContent === correct) {
+            opt.style.background = 'rgba(16,185,129,0.2)';
+            opt.style.borderColor = 'var(--success)';
+            opt.innerHTML = '✅ ' + opt.textContent;
+        }
+        if (opt === btn && !isCorrect) {
+            opt.style.background = 'rgba(239,68,68,0.2)';
+            opt.style.borderColor = 'var(--danger)';
+            opt.innerHTML = '❌ ' + opt.textContent;
+        }
+    });
+    
+    if (isCorrect) {
+        quizCorrect++;
+        document.getElementById('quizCorrect').textContent = quizCorrect;
+        showFeedback(true, 'أحسنت!');
+    } else {
+        quizWrong++;
+        document.getElementById('quizWrong').textContent = quizWrong;
+        showFeedback(false, `الإجابة الصحيحة: ${correct}`);
+    }
+    
+    document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function checkOrderingAnswer(correctSteps) {
+    quizAnswered = true;
+    
+    const container = document.getElementById('quizOptions');
+    const inputs = container.querySelectorAll('input[type="number"]');
+    
+    const userOrder = {};
+    inputs.forEach(input => {
+        const position = parseInt(input.value);
+        const step = input.dataset.step;
+        if (position) {
+            userOrder[position] = step;
+        }
+    });
+    
+    let isCorrect = true;
+    for (let i = 1; i <= correctSteps.length; i++) {
+        if (userOrder[i] !== correctSteps[i - 1]) {
+            isCorrect = false;
+            break;
+        }
+    }
+    
+    // Show correct order
+    inputs.forEach((input, index) => {
+        const step = input.dataset.step;
+        const correctPosition = correctSteps.indexOf(step) + 1;
+        const userPosition = parseInt(input.value);
+        
+        if (userPosition === correctPosition) {
+            input.style.background = 'rgba(16,185,129,0.3)';
+            input.style.borderColor = 'var(--success)';
+            input.parentElement.style.borderColor = 'var(--success)';
+        } else {
+            input.style.background = 'rgba(239,68,68,0.3)';
+            input.style.borderColor = 'var(--danger)';
+            input.parentElement.style.borderColor = 'var(--danger)';
+            input.value = `${userPosition || '?'} → ${correctPosition}`;
+        }
+        input.disabled = true;
+    });
+    
+    if (isCorrect) {
+        quizCorrect++;
+        document.getElementById('quizCorrect').textContent = quizCorrect;
+        showFeedback(true, 'الترتيب صحيح تماماً!');
+    } else {
+        quizWrong++;
+        document.getElementById('quizWrong').textContent = quizWrong;
+        showFeedback(false, 'الترتيب الصحيح معروض بجانب كل عنصر');
+    }
+    
+    document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function checkLabelingAnswer(correctElements, keywords) {
+    quizAnswered = true;
+    
+    const container = document.getElementById('quizOptions');
+    const inputs = container.querySelectorAll('input[type="text"]');
+    
+    let correctCount = 0;
+    
+    inputs.forEach((input, index) => {
+        const userAnswer = input.value.toLowerCase().trim();
+        const correctAnswer = correctElements[index].toLowerCase();
+        
+        // Smart checking with keywords
+        let isCorrect = false;
+        
+        // Check if user answer contains key parts of correct answer
+        const keyParts = correctAnswer.split(/[\s(),.-]+/).filter(p => p.length > 2);
+        const matchedParts = keyParts.filter(part => userAnswer.includes(part));
+        
+        // Also check against provided keywords
+        const matchedKeywords = keywords.filter(kw => userAnswer.includes(kw.toLowerCase()));
+        
+        if (matchedParts.length >= Math.ceil(keyParts.length / 2) || matchedKeywords.length > 0) {
+            isCorrect = true;
+        }
+        
+        if (isCorrect) {
+            correctCount++;
+            input.style.background = 'rgba(16,185,129,0.2)';
+            input.style.borderColor = 'var(--success)';
+            input.value = `✅ ${input.value}`;
+        } else {
+            input.style.background = 'rgba(239,68,68,0.2)';
+            input.style.borderColor = 'var(--danger)';
+            input.value = `❌ ${input.value} → ${correctElements[index]}`;
+        }
+        input.disabled = true;
+    });
+    
+    const allCorrect = correctCount === correctElements.length;
+    
+    if (allCorrect) {
+        quizCorrect++;
+        document.getElementById('quizCorrect').textContent = quizCorrect;
+        showFeedback(true, `جميع الإجابات صحيحة! (${correctCount}/${correctElements.length})`);
+    } else {
+        quizWrong++;
+        document.getElementById('quizWrong').textContent = quizWrong;
+        showFeedback(false, `${correctCount}/${correctElements.length} صحيحة. الإجابات الصحيحة معروضة`);
+    }
+    
+    document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function checkMentionAnswer(userAnswer, keywords, requiredCount) {
+    quizAnswered = true;
+    
+    const normalizedAnswer = userAnswer.toLowerCase().trim();
+    const foundKeywords = [];
+    
+    keywords.forEach(kw => {
+        if (normalizedAnswer.includes(kw.toLowerCase())) {
+            foundKeywords.push(kw);
+        }
+    });
+    
+    const isCorrect = foundKeywords.length >= requiredCount;
+    
+    if (isCorrect) {
+        quizCorrect++;
+        document.getElementById('quizCorrect').textContent = quizCorrect;
+        showFeedback(true, `وجدنا ${foundKeywords.length} عناصر صحيحة! (${foundKeywords.join(', ')})`);
+    } else {
+        quizWrong++;
+        document.getElementById('quizWrong').textContent = quizWrong;
+        showFeedback(false, `وجدنا ${foundKeywords.length}/${requiredCount} فقط. من الكلمات الصحيحة: ${keywords.slice(0, requiredCount).join(', ')}`);
+    }
+    
+    document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function checkDirectQuestionAnswer(userAnswer, keywords, requiredKeywords) {
+    quizAnswered = true;
+    
+    const normalizedAnswer = userAnswer.toLowerCase().trim();
+    const foundKeywords = [];
+    
+    keywords.forEach(kw => {
+        if (normalizedAnswer.includes(kw.toLowerCase())) {
+            foundKeywords.push(kw);
+        }
+    });
+    
+    const isCorrect = foundKeywords.length >= requiredKeywords;
+    
+    if (isCorrect) {
+        quizCorrect++;
+        document.getElementById('quizCorrect').textContent = quizCorrect;
+        showFeedback(true, `إجابة جيدة! وجدنا ${foundKeywords.length} مفاهيم أساسية صحيحة`);
+    } else {
+        quizWrong++;
+        document.getElementById('quizWrong').textContent = quizWrong;
+        showFeedback(false, `الإجابة تحتاج المزيد من التفاصيل. يجب ذكر مفاهيم مثل: ${keywords.slice(0, requiredKeywords).join(', ')}`);
+    }
+    
+    document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function showFeedback(isCorrect, message) {
+    const fb = document.getElementById('quizFeedback');
+    fb.style.display = 'block';
+    
+    if (isCorrect) {
+        fb.style.background = 'rgba(16,185,129,0.15)';
+        fb.style.border = '1px solid rgba(16,185,129,0.3)';
+        fb.innerHTML = `<div style="font-size:20px;margin-bottom:5px;">✅ ${message}</div>`;
+    } else {
+        fb.style.background = 'rgba(239,68,68,0.15)';
+        fb.style.border = '1px solid rgba(239,68,68,0.3)';
+        fb.innerHTML = `<div style="font-size:20px;margin-bottom:5px;">❌ إجابة خاطئة</div><div style="font-size:14px;">${message}</div>`;
+    }
+}
+
+function nextQuizQuestion() {
+    quizIndex++;
+    const totalQuestions = quizQuestions.length;
+    
+    if (quizIndex >= totalQuestions) {
+        finishQuiz();
+    } else {
+        loadQuizQuestion();
+    }
+}
+
+function finishQuiz() {
+    const totalQuestions = quizQuestions.length;
+    let requiredScore, nextLevel;
+    
+    if (currentQuizLevel === 'easy') {
+        requiredScore = 15;
+        nextLevel = 'medium';
+    } else if (currentQuizLevel === 'medium') {
+        requiredScore = 25;
+        nextLevel = 'hard';
+    } else if (currentQuizLevel === 'hard') {
+        requiredScore = 35;
+        nextLevel = null;
+    } else {
+        requiredScore = Math.ceil(totalQuestions * 0.75);
+        nextLevel = null;
+    }
+    
+    const passed = quizCorrect >= requiredScore;
+    const overlay = document.getElementById('feedback');
+    
+    // Save best score
+    const savedScore = localStorage.getItem(`quiz_${currentQuizLevel}_best`) || 0;
+    if (quizCorrect > savedScore) {
+        localStorage.setItem(`quiz_${currentQuizLevel}_best`, quizCorrect);
+    }
+    
+    // Unlock next level if passed
+    if (passed && nextLevel) {
+        localStorage.setItem(`quiz_${nextLevel}_unlocked`, 'true');
+    }
+    
+    if (passed) {
+        const message = nextLevel ? `تم فتح ${nextLevel === 'medium' ? 'المستوى المتوسط' : 'المستوى الصعب'}!` : 'أكملت جميع المستويات!';
+        overlay.innerHTML = `<div class="feedback-card"><div class="feedback-icon">🎉</div><div class="feedback-title success">نجحت!</div><div class="feedback-msg">أحسنت! ${quizCorrect}/${totalQuestions} صحيح<br>${message}</div><button class="btn btn-primary" onclick="document.getElementById('feedback').classList.remove('active'); navigateTo('knowledgeTests');">عودة</button></div>`;
+    } else {
+        overlay.innerHTML = `<div class="feedback-card"><div class="feedback-icon">😞</div><div class="feedback-title" style="color:var(--danger);">للأسف</div><div class="feedback-msg">تحتاج ${requiredScore}+ صحيح. حصلت على ${quizCorrect}/${totalQuestions}</div><button class="btn btn-primary" onclick="document.getElementById('feedback').classList.remove('active'); startKnowledgeQuiz('${currentQuizLevel}');">حاول مرة أخرى</button></div>`;
+    }
+    
+    overlay.classList.add('active');
+}
+
+// === GAME: LEVELS ===
+function renderLevels() {
+    const progress = loadProgress();
+    const container = document.getElementById('levelsGrid');
+    container.innerHTML = '';
+    
+    levelsData.forEach((_, index) => {
+        const levelNum = index + 1;
+        const isUnlocked = levelNum <= progress.unlockedLevels;
+        const stars = progress.levelStars[levelNum] || 0;
+        
+        const card = document.createElement('div');
+        card.className = `level-card ${isUnlocked ? '' : 'locked'}`;
+        if (isUnlocked) {
+            card.onclick = () => startLevel(index);
+        }
+        
+        card.innerHTML = `
+            ${!isUnlocked ? '<div class="level-lock">🔒</div>' : ''}
+            <div class="level-number">${levelNum}</div>
+            <div class="level-label">المستوى ${levelNum}</div>
+            ${stars > 0 ? `<div class="level-stars">${'⭐'.repeat(stars)}</div>` : ''}
+        `;
+        
+        container.appendChild(card);
+    });
+}
+
+function startLevel(levelIndex) {
+    gameState.currentLevel = levelIndex;
+    gameState.currentQuestion = 0;
+    gameState.points = 0;
+    gameState.startTime = Date.now();
+    
+    document.getElementById('hudLevel').textContent = levelIndex + 1;
+    document.getElementById('hudPoints').textContent = '0';
+    
+    navigateTo('gameScreen');
+    document.getElementById('gameHud').classList.add('active');
+    
+    loadQuestion();
+    startTimer();
+}
+
+// === GAME: TIMER ===
+let timerInterval;
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+        const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+        const secs = (elapsed % 60).toString().padStart(2, '0');
+        document.getElementById('hudTimer').textContent = `${mins}:${secs}`;
+    }, 1000);
+}
+
+// === GAME: QUESTION ===
+function loadQuestion() {
+    const level = levelsData[gameState.currentLevel];
+    const q = level[gameState.currentQuestion];
+    
+    gameState.isChecking = false;
+    gameState.selectedLetters = [];
+    gameState.hintedPositions = [];
+    gameState.currentAnswer = q.answer;
+    
+    document.getElementById('hudQuestion').textContent = `${gameState.currentQuestion + 1}/10`;
+    document.getElementById('clueText').textContent = q.clue;
+    
+    const lettersOnly = q.answer.replace(/\s/g, '');
+    const all = [...lettersOnly.split(''), ...q.extra];
+    gameState.availableLetters = shuffle(all).map((l, i) => ({ id: i, letter: l, used: false }));
+    
+    renderEmptySlots(q.answer);
+    renderChoices();
+}
+
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function renderEmptySlots(answer) {
+    const container = document.getElementById('answerSlots');
+    container.innerHTML = '';
+    container.classList.remove('correct', 'wrong');
+    
+    const words = answer.split(' ');
+    
+    if (words.length > 1) {
+        container.style.flexDirection = 'column';
+        container.style.gap = '10px';
+        
+        words.forEach((word) => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.gap = '6px';
+            row.style.justifyContent = 'center';
+            row.style.flexWrap = 'nowrap';
+            
+            for (let i = 0; i < word.length; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'empty-slot';
+                row.appendChild(slot);
+            }
+            container.appendChild(row);
+        });
+    } else {
+        container.style.flexDirection = 'row';
+        container.style.gap = '6px';
+        
+        for (let i = 0; i < answer.length; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'empty-slot';
+            container.appendChild(slot);
+        }
+    }
+}
+
+function renderChoices() {
+    const container = document.getElementById('letterChoices');
+    container.innerHTML = '';
+    gameState.availableLetters.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn';
+        btn.textContent = item.letter;
+        btn.disabled = item.used;
+        btn.onclick = () => selectLetter(item.id);
+        container.appendChild(btn);
+    });
+}
+
+function selectLetter(id) {
+    if (gameState.isChecking) return;
+    
+    const item = gameState.availableLetters.find(l => l.id === id);
+    if (!item || item.used) return;
+    
+    item.used = true;
+    gameState.selectedLetters.push(id);
+    
+    updateAnswerSlots();
+    renderChoices();
+}
+
+function updateAnswerSlots() {
+    const slots = document.querySelectorAll('.empty-slot');
+    const answerNoSpaces = gameState.currentAnswer.replace(/\s/g, '');
+    
+    slots.forEach((slot, i) => {
+        slot.classList.remove('filled');
+        slot.textContent = '';
+        slot.onclick = null;
+        
+        if (gameState.hintedPositions.includes(i)) {
+            slot.textContent = answerNoSpaces[i];
+            slot.classList.add('hint');
+        }
+    });
+    
+    gameState.selectedLetters.forEach((id, index) => {
+        let availableSlots = Array.from(slots).filter((s, i) => !gameState.hintedPositions.includes(i));
+        if (availableSlots[index]) {
+            const item = gameState.availableLetters.find(l => l.id === id);
+            availableSlots[index].textContent = item.letter;
+            availableSlots[index].classList.add('filled');
+            availableSlots[index].onclick = () => removeLetter(index);
+        }
+    });
+}
+
+function removeLetter(index) {
+    if (gameState.isChecking) return;
+    
+    const id = gameState.selectedLetters[index];
+    const item = gameState.availableLetters.find(l => l.id === id);
+    if (!item) return;
+    
+    item.used = false;
+    gameState.selectedLetters.splice(index, 1);
+    
+    updateAnswerSlots();
+    renderChoices();
+}
+
+function resetLetters() {
+    if (gameState.isChecking) return;
+    
+    gameState.selectedLetters = [];
+    gameState.availableLetters.forEach(l => l.used = false);
+    updateAnswerSlots();
+    renderChoices();
+}
+
+function useHint() {
+    if (gameState.isChecking) return;
+    
+    if (gameState.points <= 0) {
+        alert('تحتاج على الأقل 5 نقاط للحصول على مساعدة!');
+        return;
+    }
+    
+    const answerNoSpaces = gameState.currentAnswer.replace(/\s/g, '');
+    const slots = Array.from(document.querySelectorAll('.empty-slot'));
+    const unhinted = [];
+    
+    slots.forEach((slot, i) => {
+        if (!gameState.hintedPositions.includes(i)) {
+            unhinted.push(i);
+        }
+    });
+    
+    if (unhinted.length === 0) return;
+    
+    const pos = unhinted[0];
+    gameState.hintedPositions.push(pos);
+    gameState.points -= 5;
+    
+    document.getElementById('hudPoints').textContent = gameState.points;
+    updateAnswerSlots();
+    playSound('hint');
+}
+
+function skipQuestion() {
+    if (gameState.isChecking) return;
+    
+    gameState.points -= 10;
+    document.getElementById('hudPoints').textContent = gameState.points;
+    playSound('skip');
+    nextQuestion();
+}
+
+function checkAnswer() {
+    if (gameState.isChecking) return;
+    
+    let userAnswer = '';
+    const slots = document.querySelectorAll('.empty-slot');
+    slots.forEach(slot => userAnswer += slot.textContent);
+    
+    const answerSlots = document.getElementById('answerSlots');
+    const correctAnswer = gameState.currentAnswer.replace(/\s/g, '');
+    
+    if (userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+        gameState.isChecking = true;
+        answerSlots.classList.add('correct');
+        gameState.points += 20;
+        document.getElementById('hudPoints').textContent = gameState.points;
+        
+        playSound('success');
+        
+        setTimeout(() => showFeedback(true), 800);
+        
+    } else if (userAnswer.length === 0) {
+        answerSlots.style.borderColor = 'var(--accent)';
+        setTimeout(() => answerSlots.style.borderColor = '', 600);
+        
+    } else {
+        gameState.isChecking = true;
+        answerSlots.classList.add('wrong');
+        playSound('error');
+        
+        setTimeout(() => {
+            answerSlots.classList.remove('wrong');
+            resetLetters();
+            gameState.isChecking = false;
+        }, 800);
+    }
+}
+
+function showFeedback(success) {
+    const messages = ['رائع جداً! 🌟', 'ممتاز! واصل! 🚀', 'أحسنت! ⭐', 'إجابة صحيحة! 💪'];
+    
+    const overlay = document.getElementById('feedback');
+    overlay.innerHTML = `
+        <div class="feedback-card">
+            <div class="feedback-icon">✅</div>
+            <div class="feedback-title success">إجابة صحيحة!</div>
+            <div class="feedback-msg">${messages[Math.floor(Math.random() * messages.length)]}</div>
+            <div class="feedback-points">+20 نقطة 🏅</div>
+            <button class="btn btn-primary" onclick="nextQuestion()">التالي →</button>
+        </div>
+    `;
+    overlay.classList.add('active');
+}
+
+function nextQuestion() {
+    document.getElementById('feedback').classList.remove('active');
+    
+    gameState.currentQuestion++;
+    
+    if (gameState.currentQuestion >= 10) {
+        completeLevel();
+    } else {
+        loadQuestion();
+    }
+}
+
+function completeLevel() {
+    clearInterval(timerInterval);
+    
+    const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    
+    const stars = gameState.points >= 180 ? 3 : gameState.points >= 120 ? 2 : 1;
+    
+    const progress = loadProgress();
+    progress.levelStars[gameState.currentLevel + 1] = Math.max(stars, progress.levelStars[gameState.currentLevel + 1] || 0);
+    progress.unlockedLevels = Math.max(progress.unlockedLevels, gameState.currentLevel + 2);
+    saveProgress(progress);
+    
+    const leaderboard = loadLeaderboard();
+    leaderboard.push({
+        name: gameState.playerName,
+        level: gameState.currentLevel + 1,
+        points: gameState.points,
+        time: elapsed,
+        date: Date.now()
+    });
+    leaderboard.sort((a, b) => b.points - a.points || a.time - b.time);
+    saveLeaderboard(leaderboard.slice(0, 50));
+    
+    const overlay = document.getElementById('feedback');
+    overlay.innerHTML = `
+        <div class="feedback-card level-complete">
+            <div class="feedback-icon">🏆</div>
+            <div class="level-complete-title">أكملت المستوى ${gameState.currentLevel + 1}!</div>
+            <div class="level-stats">
+                <div class="stat-row">
+                    <span class="stat-label">النقاط النهائية</span>
+                    <span class="stat-value">${gameState.points}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">الوقت المستغرق</span>
+                    <span class="stat-value">${mins}:${secs.toString().padStart(2,'0')}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">التقييم</span>
+                    <span class="stat-value">${'⭐'.repeat(stars)}</span>
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="backToLevels()">اختر مستوى آخر</button>
+                <button class="btn btn-ghost" onclick="showLeaderboard()">🏆 المتصدرين</button>
+            </div>
+        </div>
+    `;
+    overlay.classList.add('active');
+}
+
+function backToLevels() {
+    document.getElementById('feedback').classList.remove('active');
+    navigateTo('levelsScreen');
+}
+
+function showLeaderboard() {
+    const leaderboard = loadLeaderboard();
+    const list = document.getElementById('leaderboardList');
+    list.innerHTML = '';
+    
+    if (leaderboard.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray);">لا توجد نتائج بعد</div>';
+    } else {
+        leaderboard.slice(0, 10).forEach((entry, i) => {
+            const mins = Math.floor(entry.time / 60);
+            const secs = entry.time % 60;
+            
+            const row = document.createElement('div');
+            row.className = 'leaderboard-row';
+            row.innerHTML = `
+                <div class="leaderboard-rank">${i + 1}</div>
+                <div class="leaderboard-name">${entry.name}</div>
+                <div class="leaderboard-score">${entry.points}</div>
+                <div class="leaderboard-time">${mins}:${secs.toString().padStart(2,'0')}</div>
+            `;
+            list.appendChild(row);
+        });
+    }
+    
+    navigateTo('leaderboardScreen');
+}
+
+// === SOUNDS ===
+let audioCtx = null;
+
+function getAudioCtx() {
+    if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        catch(e) {}
+    }
+    return audioCtx;
+}
+
+function playSound(type) {
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    if (type === 'success') {
+        osc.frequency.setValueAtTime(523, ctx.currentTime);
+        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+    } else if (type === 'error') {
+        osc.frequency.setValueAtTime(200, ctx.currentTime);
+        osc.frequency.setValueAtTime(150, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+    } else if (type === 'hint' || type === 'skip') {
+        osc.frequency.setValueAtTime(400, ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.2);
+    }
+}
+</script>
+</body>
+</html>
